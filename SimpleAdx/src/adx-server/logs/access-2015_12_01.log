@@ -1,0 +1,8 @@
+0:0:0:0:0:0:0:1 - - [01/Dec/2015:11:39:23 +0200] "GET / HTTP/1.1" 200 241 "-" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36" -
+0:0:0:0:0:0:0:1 - - [01/Dec/2015:11:39:23 +0200] "GET /top/ HTTP/1.1" 200 335 "http://localhost:8080/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36" -
+0:0:0:0:0:0:0:1 - - [01/Dec/2015:11:39:23 +0200] "GET /menu/ HTTP/1.1" 200 922 "http://localhost:8080/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36" -
+0:0:0:0:0:0:0:1 - - [01/Dec/2015:11:39:23 +0200] "GET /status/ HTTP/1.1" 200 165 "http://localhost:8080/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36" -
+0:0:0:0:0:0:0:1 - - [01/Dec/2015:11:39:24 +0200] "GET /favicon.ico HTTP/1.1" 404 1248 "http://localhost:8080/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36" -
+0:0:0:0:0:0:0:1 - - [01/Dec/2015:11:39:26 +0200] "GET /status/ HTTP/1.1" 200 165 "http://localhost:8080/menu/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36" -
+0:0:0:0:0:0:0:1 - - [01/Dec/2015:11:39:28 +0200] "GET /register/ HTTP/1.1" 200 851 "http://localhost:8080/menu/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36" -
+0:0:0:0:0:0:0:1 - - [01/Dec/2015:11:39:40 +0200] "POST /register/ HTTP/1.1" 200 36 "http://localhost:8080/register/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36" -

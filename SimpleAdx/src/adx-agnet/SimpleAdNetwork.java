@@ -248,8 +248,17 @@ public class SimpleAdNetwork extends Agent {
 
 		Random random = new Random();
 		long cmpimps = com.getReachImps();
-		long cmpBidMillis = random.nextInt((int)cmpimps);
+		System.out.println("######## server demanded: " + cmpimps);
+		//long cmpBidMillis = random.nextInt((int)cmpimps);
+		
+		
+		//TODO fix numbers better
+		//1.1 = agent quality level, need to change dynamically
 
+		double cmpBidMillisMinimum = ((0.1666 * (double) cmpimps)) + 1 ;
+		long cmpBidMillis = (long) cmpBidMillisMinimum;
+		System.out.println("######## i gave: " + cmpBidMillis + ",minimum was:" + cmpBidMillisMinimum);
+		
 		System.out.println("Day " + day + ": Campaign total budget bid (millis): " + cmpBidMillis);
 
 		/*

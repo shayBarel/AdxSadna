@@ -1,0 +1,20 @@
+01/12 12:39:14 INFO file.FileDatabase|infodb: database opened as C:\Nir\code\AdxSadna\AdxSadna\SimpleAdx\src\adx-server\infodb
+01/12 12:39:14 INFO common.BlockingViewerServer|viewer server started at *:4042
+01/12 10:39:14 INFO sim.Admin|adding manager for simulation type tac13adx
+01/12 10:39:14 INFO server.TACTGateway|TACT Server started at *:6502
+01/12 10:39:18 INFO server.TACTChannel|user WizardOfAdz logged in as WizardOfAdz@tact-1 with version 0.9.6 from 127.0.0.1
+01/12 10:39:18 INFO sim.Admin|created simulation 7
+01/12 10:39:20 SEVERE tact.TACTConnection|WizardOfAdz@tact-1: reading error 
+java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(Unknown Source)
+	at java.net.SocketInputStream.read(Unknown Source)
+	at java.net.SocketInputStream.read(Unknown Source)
+	at java.io.DataInputStream.readInt(Unknown Source)
+	at se.sics.isl.tact.TACTConnection$TACTReader.run(TACTConnection.java:405)
+01/12 10:39:25 INFO server.TACTChannel|user WizardOfAdz logged in as WizardOfAdz@tact-2 with version 0.9.6 from 127.0.0.1
+01/12 10:40:00 FINE sim.Admin|Entering log for simulation 6
+************************************************************
+* Entering log for simulation 6
+************************************************************
+
+
