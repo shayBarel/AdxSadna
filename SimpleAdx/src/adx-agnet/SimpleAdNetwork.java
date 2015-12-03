@@ -252,19 +252,17 @@ public class SimpleAdNetwork extends Agent {
 		System.out.println("######## server demanded: " + cmpimps);
 		//long cmpBidMillis = random.nextInt((int)cmpimps);
 		
+		long cmpBidMillis = 0;
+		double cmpBidMillisMinimum = 0;
 		
 		//TODO fix numbers better
 		//1.1 = agent quality level, need to change dynamically
 		if(limitCampaign>0)
 		{
-			double cmpBidMillisMinimum = ((0.1666 * (double) cmpimps)) + 1 ;
-			long cmpBidMillis = (long) cmpBidMillisMinimum;
+			cmpBidMillisMinimum = ((0.1666 * (double) cmpimps)) + 1 ;
+			cmpBidMillis = (long) cmpBidMillisMinimum;
 		}
-		else
-		{
-			double cmpBidMillisMinimum = 0;
-			long cmpBidMillis = (long) cmpBidMillisMinimum;
-		}
+
 		System.out.println("######## i gave: " + cmpBidMillis + ",minimum was:" + cmpBidMillisMinimum);
 		System.out.println("Day " + day + ": Campaign total budget bid (millis): " + cmpBidMillis);
 
@@ -275,7 +273,8 @@ public class SimpleAdNetwork extends Agent {
 
 		if (adNetworkDailyNotification != null) {
 			double ucsLevel = adNetworkDailyNotification.getServiceLevel();
-			ucsBid = 0.1 + random.nextDouble()/10.0;			
+			//ucsBid = 0.1 + random.nextDouble()/10.0;
+			ucsBid = 0.2;
 			System.out.println("Day " + day + ": ucs level reported: " + ucsLevel);
 		} else {
 			System.out.println("Day " + day + ": Initial ucs bid is " + ucsBid);
@@ -358,7 +357,7 @@ public class SimpleAdNetwork extends Agent {
 		 */
 
 		//double rbid = 10.0*random.nextDouble();
-		double rbid = 100.0;
+		double rbid = 10.0;
 
 		/*
 		 * add bid entries w.r.t. each active campaign with remaining contracted
