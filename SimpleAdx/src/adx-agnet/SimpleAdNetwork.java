@@ -296,6 +296,8 @@ public class SimpleAdNetwork extends Agent {
 		String campaignAllocatedTo = " allocated to "
 				+ notificationMessage.getWinner();
 
+		
+		//handle won campaign (if any)
 		if ((pendingCampaign.id == adNetworkDailyNotification.getCampaignId())
 				&& (notificationMessage.getCostMillis() != 0)) {
 
@@ -348,7 +350,8 @@ public class SimpleAdNetwork extends Agent {
 		 * revenue per imp
 		 */
 
-		double rbid = 10.0*random.nextDouble();
+		//double rbid = 10.0*random.nextDouble();
+		double rbid = 100.0;
 
 		/*
 		 * add bid entries w.r.t. each active campaign with remaining contracted
