@@ -380,8 +380,11 @@ public class SimpleAdNetwork extends Agent {
 	
 				int entCount = 0;
 	
-				for (AdxQuery query : cmp.campaignQueries) {
-					if (cmp.impsTogo() - entCount > 0) {
+				for (AdxQuery query : cmp.campaignQueries) 
+				{
+					
+					if (cmp.impsTogo() - entCount > 0) 
+					{
 						/*
 						 * among matching entries with the same campaign id, the AdX
 						 * randomly chooses an entry according to the designated
@@ -392,40 +395,20 @@ public class SimpleAdNetwork extends Agent {
 							if (query.getAdType() == AdType.text) {
 								entCount++;
 							} else {
-								//entCount += currCampaign.videoCoef;
-								for(int i=0;i<cmp.videoCoef;i++)
-								{
-									entCount++;
-									if(cmp.impsTogo() - entCount==0)
-										break;
-								}
+								entCount += cmp.videoCoef;
 							}
 						} else {
 							if (query.getAdType() == AdType.text) {
-								//entCount +=currCampaign.mobileCoef;
-								for(int i=0;i<cmp.mobileCoef;i++)
-								{
-									entCount++;
-									if(cmp.impsTogo() - entCount==0)
-										break;
-								}
-								
+								entCount+=cmp.mobileCoef;
 							} else {
-								for(int i=0;i<cmp.videoCoef + cmp.mobileCoef;i++)
-								{
-									entCount++;
-									if(cmp.impsTogo() - entCount==0)
-										break;
-								}
-								//entCount += currCampaign.videoCoef + currCampaign.mobileCoef;
+								entCount += cmp.videoCoef + cmp.mobileCoef;
 							}
-	
+
 						}
 						bidBundle.addQuery(query, rbid, new Ad(null),
 								cmp.id, 1);
 					}
 				}
-	
 				double impressionLimit = cmp.impsTogo();
 				double budgetLimit = cmp.budget * 10;
 				bidBundle.setCampaignDailyLimit(cmp.id,
@@ -433,13 +416,19 @@ public class SimpleAdNetwork extends Agent {
 	
 				System.out.println("Day " + day + ": Updated " + entCount
 						+ " Bid Bundle entries for Campaign id " + cmp.id);
+				
 			}
+		
+			//finished with campaign, move on to next.
 		}
 		
-		if (bidBundle != null) {
+		//send the bid bundle after finishing with all campaigns
+		if (bidBundle != null) 
+		{
 			System.out.println("Day " + day + ": Sending BidBundle");
 			sendMessage(adxAgentAddress, bidBundle);
 		}
+		
 	}
 
 	/**
