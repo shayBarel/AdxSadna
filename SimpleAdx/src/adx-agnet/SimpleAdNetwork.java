@@ -385,13 +385,32 @@ public class SimpleAdNetwork extends Agent {
 						if (query.getAdType() == AdType.text) {
 							entCount++;
 						} else {
-							entCount += currCampaign.videoCoef;
+							//entCount += currCampaign.videoCoef;
+							for(int i=0;i<currCampaign.videoCoef;i++)
+							{
+								entCount++;
+								if(currCampaign.impsTogo() - entCount==0)
+									continue;
+							}
 						}
 					} else {
 						if (query.getAdType() == AdType.text) {
-							entCount+=currCampaign.mobileCoef;
+							//entCount +=currCampaign.mobileCoef;
+							for(int i=0;i<currCampaign.mobileCoef;i++)
+							{
+								entCount++;
+								if(currCampaign.impsTogo() - entCount==0)
+									continue;
+							}
+							
 						} else {
-							entCount += currCampaign.videoCoef + currCampaign.mobileCoef;
+							for(int i=0;i<currCampaign.videoCoef + currCampaign.mobileCoef;i++)
+							{
+								entCount++;
+								if(currCampaign.impsTogo() - entCount==0)
+									continue;
+							}
+							//entCount += currCampaign.videoCoef + currCampaign.mobileCoef;
 						}
 
 					}
