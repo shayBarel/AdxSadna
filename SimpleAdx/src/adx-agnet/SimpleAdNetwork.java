@@ -113,6 +113,7 @@ public class SimpleAdNetwork extends Agent {
 	/*
 	 * current day of simulation
 	 */
+	private int limitCampaign = 3;
 	private int day;
 	private String[] publisherNames;
 	private CampaignData currCampaign;
@@ -254,11 +255,17 @@ public class SimpleAdNetwork extends Agent {
 		
 		//TODO fix numbers better
 		//1.1 = agent quality level, need to change dynamically
-
-		double cmpBidMillisMinimum = ((0.1666 * (double) cmpimps)) + 1 ;
-		long cmpBidMillis = (long) cmpBidMillisMinimum;
+		if(limitCampaign>0)
+		{
+			double cmpBidMillisMinimum = ((0.1666 * (double) cmpimps)) + 1 ;
+			long cmpBidMillis = (long) cmpBidMillisMinimum;
+		}
+		else
+		{
+			double cmpBidMillisMinimum = 0;
+			long cmpBidMillis = (long) cmpBidMillisMinimum;
+		}
 		System.out.println("######## i gave: " + cmpBidMillis + ",minimum was:" + cmpBidMillisMinimum);
-		
 		System.out.println("Day " + day + ": Campaign total budget bid (millis): " + cmpBidMillis);
 
 		/*
@@ -298,7 +305,7 @@ public class SimpleAdNetwork extends Agent {
 
 		if ((pendingCampaign.id == adNetworkDailyNotification.getCampaignId())
 				&& (notificationMessage.getCostMillis() != 0)) {
-
+			limitCampaign --;
 			/* add campaign to list of won campaigns */
 			pendingCampaign.setBudget(notificationMessage.getCostMillis()/1000.0);
 			currCampaign = pendingCampaign;
