@@ -401,7 +401,7 @@ public class SimpleAdNetwork extends Agent {
 			}
 
 			double impressionLimit = currCampaign.impsTogo();
-			double budgetLimit = currCampaign.budget;
+			double budgetLimit = currCampaign.budget * 10;
 			bidBundle.setCampaignDailyLimit(currCampaign.id,
 					(int) impressionLimit, budgetLimit);
 
