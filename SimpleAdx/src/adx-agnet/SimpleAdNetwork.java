@@ -359,75 +359,83 @@ public class SimpleAdNetwork extends Agent {
 		//double rbid = 10.0*random.nextDouble();
 		double rbid = 10.0;
 
-		/*
-		 * add bid entries w.r.t. each active campaign with remaining contracted
-		 * impressions.
-		 * 
-		 * for now, a single entry per active campaign is added for queries of
-		 * matching target segment.
-		 */
-
-		if ((dayBiddingFor >= currCampaign.dayStart)
-				&& (dayBiddingFor <= currCampaign.dayEnd)
-				&& (currCampaign.impsTogo() > 0)) {
-
-			int entCount = 0;
-
-			for (AdxQuery query : currCampaign.campaignQueries) {
-				if (currCampaign.impsTogo() - entCount > 0) {
-					/*
-					 * among matching entries with the same campaign id, the AdX
-					 * randomly chooses an entry according to the designated
-					 * weight. by setting a constant weight 1, we create a
-					 * uniform probability over active campaigns(irrelevant because we are bidding only on one campaign)
-					 */
-					if (query.getDevice() == Device.pc) {
-						if (query.getAdType() == AdType.text) {
-							entCount++;
+		//loop through all campaigns
+		for (Map.Entry<Integer, CampaignData> entry : myCampaigns.entrySet())
+		{
+			
+		    System.out.println(entry.getKey() + "/" + entry.getValue());
+		    
+		    CampaignData cmp = entry.getValue();
+			/*
+			 * add bid entries w.r.t. each active campaign with remaining contracted
+			 * impressions.
+			 * 
+			 * for now, a single entry per active campaign is added for queries of
+			 * matching target segment.
+			 */
+	
+			if ((dayBiddingFor >= cmp.dayStart)
+					&& (dayBiddingFor <= cmp.dayEnd)
+					&& (cmp.impsTogo() > 0)) {
+	
+				int entCount = 0;
+	
+				for (AdxQuery query : cmp.campaignQueries) {
+					if (cmp.impsTogo() - entCount > 0) {
+						/*
+						 * among matching entries with the same campaign id, the AdX
+						 * randomly chooses an entry according to the designated
+						 * weight. by setting a constant weight 1, we create a
+						 * uniform probability over active campaigns(irrelevant because we are bidding only on one campaign)
+						 */
+						if (query.getDevice() == Device.pc) {
+							if (query.getAdType() == AdType.text) {
+								entCount++;
+							} else {
+								//entCount += currCampaign.videoCoef;
+								for(int i=0;i<cmp.videoCoef;i++)
+								{
+									entCount++;
+									if(cmp.impsTogo() - entCount==0)
+										break;
+								}
+							}
 						} else {
-							//entCount += currCampaign.videoCoef;
-							for(int i=0;i<currCampaign.videoCoef;i++)
-							{
-								entCount++;
-								if(currCampaign.impsTogo() - entCount==0)
-									continue;
+							if (query.getAdType() == AdType.text) {
+								//entCount +=currCampaign.mobileCoef;
+								for(int i=0;i<cmp.mobileCoef;i++)
+								{
+									entCount++;
+									if(cmp.impsTogo() - entCount==0)
+										break;
+								}
+								
+							} else {
+								for(int i=0;i<cmp.videoCoef + cmp.mobileCoef;i++)
+								{
+									entCount++;
+									if(cmp.impsTogo() - entCount==0)
+										break;
+								}
+								//entCount += currCampaign.videoCoef + currCampaign.mobileCoef;
 							}
+	
 						}
-					} else {
-						if (query.getAdType() == AdType.text) {
-							//entCount +=currCampaign.mobileCoef;
-							for(int i=0;i<currCampaign.mobileCoef;i++)
-							{
-								entCount++;
-								if(currCampaign.impsTogo() - entCount==0)
-									continue;
-							}
-							
-						} else {
-							for(int i=0;i<currCampaign.videoCoef + currCampaign.mobileCoef;i++)
-							{
-								entCount++;
-								if(currCampaign.impsTogo() - entCount==0)
-									continue;
-							}
-							//entCount += currCampaign.videoCoef + currCampaign.mobileCoef;
-						}
-
+						bidBundle.addQuery(query, rbid, new Ad(null),
+								cmp.id, 1);
 					}
-					bidBundle.addQuery(query, rbid, new Ad(null),
-							currCampaign.id, 1);
 				}
+	
+				double impressionLimit = cmp.impsTogo();
+				double budgetLimit = cmp.budget * 10;
+				bidBundle.setCampaignDailyLimit(cmp.id,
+						(int) impressionLimit, budgetLimit);
+	
+				System.out.println("Day " + day + ": Updated " + entCount
+						+ " Bid Bundle entries for Campaign id " + cmp.id);
 			}
-
-			double impressionLimit = currCampaign.impsTogo();
-			double budgetLimit = currCampaign.budget * 10;
-			bidBundle.setCampaignDailyLimit(currCampaign.id,
-					(int) impressionLimit, budgetLimit);
-
-			System.out.println("Day " + day + ": Updated " + entCount
-					+ " Bid Bundle entries for Campaign id " + currCampaign.id);
 		}
-
+		
 		if (bidBundle != null) {
 			System.out.println("Day " + day + ": Sending BidBundle");
 			sendMessage(adxAgentAddress, bidBundle);
