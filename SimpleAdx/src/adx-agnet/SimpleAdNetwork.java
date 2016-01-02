@@ -27,6 +27,8 @@ import tau.tac.adx.props.PublisherCatalogEntry;
 import tau.tac.adx.props.ReservePriceInfo;
 import tau.tac.adx.report.adn.AdNetworkReport;
 import tau.tac.adx.report.adn.MarketSegment;
+import tau.tac.adx.report.adn.AdNetworkReportEntry;
+import tau.tac.adx.report.adn.AdNetworkKey;
 import tau.tac.adx.report.demand.AdNetBidMessage;
 import tau.tac.adx.report.demand.AdNetworkDailyNotification;
 import tau.tac.adx.report.demand.CampaignOpportunityMessage;
@@ -113,7 +115,10 @@ public class SimpleAdNetwork extends Agent {
 	/*
 	 * current day of simulation
 	 */
+
+	//a counter for target number of campaigns.
 	private int limitCampaign = 3;
+	
 	private int day;
 	private String[] publisherNames;
 	private CampaignData currCampaign;
@@ -249,21 +254,27 @@ public class SimpleAdNetwork extends Agent {
 
 		Random random = new Random();
 		long cmpimps = com.getReachImps();
-		System.out.println("######## server demanded: " + cmpimps);
+		//System.out.println("######## server demanded: " + cmpimps);
 		//long cmpBidMillis = random.nextInt((int)cmpimps);
 		
 		long cmpBidMillis = 0;
 		double cmpBidMillisMinimum = 0;
 		
-		//TODO fix numbers better
-		//1.1 = agent quality level, need to change dynamically
+
+		//if we are interested in more campaigns.
 		if(limitCampaign>0)
 		{
+			//make a bid on the campaign.
+			//based on doubling the target impression amount by a fixed fraction.
+			//(try to be lower than others)
 			cmpBidMillisMinimum = ((0.1666 * (double) cmpimps)) + 1 ;
 			cmpBidMillis = (long) cmpBidMillisMinimum;
 		}
-
-		System.out.println("######## i gave: " + cmpBidMillis + ",minimum was:" + cmpBidMillisMinimum);
+		else{
+			//if not - bid will stay 0 which is too low- server expected to ignore.
+		}
+		
+		//System.out.println("######## i gave: " + cmpBidMillis + ",minimum was:" + cmpBidMillisMinimum);
 		System.out.println("Day " + day + ": Campaign total budget bid (millis): " + cmpBidMillis);
 
 		/*
@@ -273,7 +284,10 @@ public class SimpleAdNetwork extends Agent {
 
 		if (adNetworkDailyNotification != null) {
 			double ucsLevel = adNetworkDailyNotification.getServiceLevel();
+			
 			//ucsBid = 0.1 + random.nextDouble()/10.0;
+			
+			//try to always win maximum UCS level.
 			ucsBid = 0.2;
 			System.out.println("Day " + day + ": ucs level reported: " + ucsLevel);
 		} else {
@@ -306,6 +320,8 @@ public class SimpleAdNetwork extends Agent {
 		//handle won campaign (if any)
 		if ((pendingCampaign.id == adNetworkDailyNotification.getCampaignId())
 				&& (notificationMessage.getCostMillis() != 0)) {
+
+			//update target campaigns count. 
 			limitCampaign --;
 			/* add campaign to list of won campaigns */
 			pendingCampaign.setBudget(notificationMessage.getCostMillis()/1000.0);
@@ -357,6 +373,8 @@ public class SimpleAdNetwork extends Agent {
 		 */
 
 		//double rbid = 10.0*random.nextDouble();
+		
+		//make a bid that is maximum, regardless of profits.
 		double rbid = 10.0;
 
 		//loop through all campaigns
@@ -410,7 +428,11 @@ public class SimpleAdNetwork extends Agent {
 					}
 				}
 				double impressionLimit = cmp.impsTogo();
+				
+				//raising the budget limit by a fixed factor.
+				//(higher than budget - allow to lose.) 
 				double budgetLimit = cmp.budget * 10;
+				
 				bidBundle.setCampaignDailyLimit(cmp.id,
 						(int) impressionLimit, budgetLimit);
 	
@@ -474,13 +496,16 @@ public class SimpleAdNetwork extends Agent {
 	private void handleAdNetworkReport(AdNetworkReport adnetReport) {
 
 		System.out.println("Day " + day + " : AdNetworkReport");
-		/*
-		 * for (AdNetworkKey adnetKey : adnetReport.keys()) {
-		 * 
-		 * double rnd = Math.random(); if (rnd > 0.95) { AdNetworkReportEntry
-		 * entry = adnetReport .getAdNetworkReportEntry(adnetKey);
-		 * System.out.println(adnetKey + " " + entry); } }
-		 */
+		
+		 for (AdNetworkKey adnetKey : adnetReport.keys()) {
+			 //double rnd = Math.random(); 
+			 //if (rnd > 0.95) 
+			// { 	
+				 AdNetworkReportEntry entry = adnetReport .getAdNetworkReportEntry(adnetKey);
+				 System.out.println(adnetKey + " " + entry); 
+			 //} 
+		 }
+		
 	}
 
 	@Override
