@@ -1,5 +1,3 @@
-
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -243,37 +241,8 @@ public class SimpleAdNetwork extends Agent {
 		pendingCampaign = new CampaignData(com);
 		System.out.println("Day " + day + ": Campaign opportunity - " + pendingCampaign);
 
-		/*
-		 * The campaign requires com.getReachImps() impressions. The competing
-		 * Ad Networks bid for the total campaign Budget (that is, the ad
-		 * network that offers the lowest budget gets the campaign allocated).
-		 * The advertiser is willing to pay the AdNetwork at most 1$ CPM,
-		 * therefore the total number of impressions may be treated as a reserve
-		 * (upper bound) price for the auction.
-		 */
-
-		Random random = new Random();
-		long cmpimps = com.getReachImps();
-		//System.out.println("######## server demanded: " + cmpimps);
-		//long cmpBidMillis = random.nextInt((int)cmpimps);
-		
-		long cmpBidMillis = 0;
-		double cmpBidMillisMinimum = 0;
-		
-
-		//if we are interested in more campaigns.
-		if(limitCampaign>0)
-		{
-			//make a bid on the campaign.
-			//based on doubling the target impression amount by a fixed fraction.
-			//(try to be lower than others)
-			cmpBidMillisMinimum = ((0.1666 * (double) cmpimps)) + 1 ;
-			cmpBidMillis = (long) cmpBidMillisMinimum;
-		}
-		else{
-			//if not - bid will stay 0 which is too low- server expected to ignore.
-		}
-		
+		BidderCampaign campBidder = new BidderCampaign();
+		long cmpBidMillis = campBidder.GenerateCampaignBid(com);
 		//System.out.println("######## i gave: " + cmpBidMillis + ",minimum was:" + cmpBidMillisMinimum);
 		System.out.println("Day " + day + ": Campaign total budget bid (millis): " + cmpBidMillis);
 
