@@ -1,5 +1,6 @@
 import tau.tac.adx.report.demand.CampaignOpportunityMessage;
 
+//
 public abstract class BidderCampaign 
 {
 
