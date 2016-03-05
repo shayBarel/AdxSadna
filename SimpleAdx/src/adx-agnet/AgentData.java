@@ -1,7 +1,7 @@
 
 /** 
  * a "global" class that contains all data about our agent .
- * may be replaced by a singleton.
+ * implements a singleton behavior.
  * @author NAttar
  *
  */
@@ -27,17 +27,43 @@ public class AgentData
 		UcsDailyPrice[i] = ucsDailyPrice;
 	}
 
-	static double _QualityRating = 1.0;
+	//Implementation of singleton.
+	private static AgentData _instance = null ;
+
+	protected AgentData() {
+		//prevent instantiation
+	}
 	
+	public static AgentData GetInstance() 
+	{
+		if(_instance == null) 
+		{
+			_instance = new AgentData();
+		}
+		return _instance;
+	}
 	
-	public static double GetQualityRating () 
+	//end Implementation of singleton.
+	///////////////////////////////
+	
+	//////////////////////////////
+	/// agent data & capabilities.
+	//////////////////////////////
+
+	
+	double _QualityRating = 1.0;
+	
+	public double GetQualityRating () 
 	{
 		return _QualityRating;
 	}
 	
-	public static void SetQualityRating (double new_qr) 
+	public void SetQualityRating (double new_qr) 
 	{
 		_QualityRating = new_qr;
 	}
+	
+	
+
 	
 }

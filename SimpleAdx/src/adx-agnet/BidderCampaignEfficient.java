@@ -22,7 +22,8 @@ public class BidderCampaignEfficient extends BidderCampaign
 	 * therefore the total number of impressions may be treated as a reserve
 	 * (upper bound) price for the auction.
 	 */
-	public long GenerateCampaignBid(CampaignOpportunityMessage msg) {
+	public long GenerateCampaignBid(CampaignOpportunityMessage msg) 
+	{
 		
 		CampaignData cmp = new CampaignData(msg);
 		

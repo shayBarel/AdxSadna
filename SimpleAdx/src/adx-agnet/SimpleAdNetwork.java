@@ -114,8 +114,6 @@ public class SimpleAdNetwork extends Agent {
 	 * current day of simulation
 	 */
 
-	//a counter for target number of campaigns.
-	private int limitCampaign = 3;
 	
 	private int day;
 	private String[] publisherNames;
