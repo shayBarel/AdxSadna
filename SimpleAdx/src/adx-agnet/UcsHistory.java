@@ -1,21 +1,28 @@
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UcsHistory {
 
-	// this is only dummy for checking this is working well .
+	// this is only dummy for checking this is working well . the game number and it's data
+	Map<Integer,AgentUcsData> GameStats; 
 	
-	int gameNum;
-	List<AgnetData> agentDatalist;
-	
-	
-	public AgentData getCurrentAgentDataReport(int CurrentDay,int gameNum)
-	{
+	UcsHistory(){
 		
+		GameStats = new HashMap<>();
 	}
 	
-	public AgentData setCurrentAgentDataReport(int CurrentDay,gameNum)
+	public double getUcsDailylevel(int CurrentDay,int gameNum)
 	{
+		AgentUcsData agent = GameStats.get(gameNum);
+		return agent.getUcsDailyPrice(CurrentDay);
+	}
 	
+	public double getUcsDailyPrice(int CurrentDay,int gameNum)
+	{
+		AgentUcsData agent = GameStats.get(gameNum);
+		return agent.getUcsDailyPrice(CurrentDay);
+
 	}
 	
 	

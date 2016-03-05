@@ -7,13 +7,27 @@
  */
 public class AgentData 
 {
-	static double []UcsDailylevel; // should be initialized with all zero
+	static double []UcsDailylevel; // should be initialized with all zero ( at start of the game )
 	static double []UcsDailyPrice; // same
-	static UcsHistory ucsHistory; // history of the game
+	static double reachedImpression;
 
 	public static double getUcsDailylevel(int i) {
 		return UcsDailylevel[i];
 	}
+	
+	
+
+	public static double getReachedImpression() {
+		return reachedImpression;
+	}
+
+
+
+	public static void setReachedImpression(double reachedImpression) {
+		AgentData.reachedImpression = reachedImpression;
+	}
+
+
 
 	public static void setUcsDailylevel(double ucsDailylevel,int i) {
 		UcsDailylevel[i] = ucsDailylevel;
