@@ -5,47 +5,64 @@ public class UcsBidder {
 	
 	
 	int UcsInitialBid;  // at start will be initialized to 0.9
-	double UCSTargetStrategy = 1.0D;
-	double rSquered;
-	double maxAmount;
-	double avgUSCTarget;
-	double avgAmountspent;
+	double avgUSCLevel;
+	double avgUcsPrice;
 	int currentDay;
 	// UCS DAILY RESULT ON array / classs 
 	// 
-
-	  private void setUSCAvrages(int dayTo, int gameNum)
+	AgentData agentData;
+	
+	
+	
+// this astrategy is only for the first 20 days .
+	  public void setUSCAvrages(int NumOfDay, int gameNum)
 	  {
-	    double sumTarget = 0.0D;double sumPrice = 0.0D;
-	    for (int i = 1; i < dayTo; i++)
+		  
+		AgentData TempagentData;
+		  
+	    double SumUSCLevel = 0.0;
+	    double sumPrice = 0.0;
+	    
+	    
+	    for (int i = 1; i < NumOfDay; i++)
 	    {
-	      try
-	      {
-	        if (this.uscDataHistory.getReport(i) != null) {
-	          this.dailyAgentData = ((UCSDailyReport)this.uscDataHistory.getReport(i, gameNum));
-	        }
-	      }
-	      catch (Exception e)
-	      {
-	        this.log.info("error with report! ********\n ");
-	      }
-	      sumTarget += this.dailyAgentData.getUCSLevel();
-	      sumPrice += this.dailyAgentData.getUCSPrice();
+
+	     if (agentData.UcsHistory.getCurrentAgentDataReport(i,gameNum) != null) {
+	        TempagentData= agentData.uscHistory.getCurrentAgentDataReport(i, gameNum);
+	     }
+	    
+	    
+	      SumUSCLevel += TempagentData.getUcsDailylevel(i);
+	      sumPrice += TempagentData.getUcsDailyPrice(i);
 	      
-	      this.avgUSCTarget = (sumTarget / dayTo);
-	      this.avgAmountspent = (sumPrice / dayTo);
+
 	    }
+	    
+	      this.avgUSCLevel = (SumUSCLevel / NumOfDay);
+	      this.avgUcsPrice = (sumPrice / NumOfDay);
 	  }
+	  
+	  public double getUSCAverageLevel()
+	  {
+		  return avgUSCLevel;
+	  }
+	  
+	  public double getUSCAveragePrice()
+	  {
+		  return avgUcsPrice;
+	  }
+
+	  
+	  
+	  
 	//create simple regression class ( from apache and calculate the regression)
-	public int CalculateUcsPriceFromRegression(){
-		
-		return 0;
-	}
+//	public int CalculateUcsPriceFromRegression(){
+//		
+//		return 0;
+//	}      
+// need to do it on seperate class
 	
-	
-	public int CalculateUcsPriceFromAvg(){
-		
-	}
+
 	
 	
 }
