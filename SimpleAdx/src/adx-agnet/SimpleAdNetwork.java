@@ -324,7 +324,8 @@ public class SimpleAdNetwork extends Agent {
 	 * 
 	 */
 	protected void sendBidAndAds() {
-
+		
+		Set<CampaignData> allCamp = new HashSet<CampaignData>(myCampaigns.values());
 		bidBundle = new AdxBidBundle();
 
 		/*
@@ -357,7 +358,7 @@ public class SimpleAdNetwork extends Agent {
 
 
 
-		    rbid = PI_indicator.impBidder(cmp, myCampaigns, day, ucsTargetLevel);
+		    rbid = PI_indicator.impBidder(cmp, allCamp, day, ucsTargetLevel);
 
 			/*
 			 * add bid entries w.r.t. each active campaign with remaining contracted
