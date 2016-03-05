@@ -353,6 +353,12 @@ public class SimpleAdNetwork extends Agent {
 		    System.out.println(entry.getKey() + "/" + entry.getValue());
 		    
 		    CampaignData cmp = entry.getValue();
+		    
+
+
+
+		    rbid = PI_indicator.impBidder(cmp, myCampaigns, day, ucsTargetLevel);
+
 			/*
 			 * add bid entries w.r.t. each active campaign with remaining contracted
 			 * impressions.
