@@ -290,8 +290,7 @@ public class SimpleAdNetwork extends Agent {
 		if ((pendingCampaign.id == adNetworkDailyNotification.getCampaignId())
 				&& (notificationMessage.getCostMillis() != 0)) {
 
-			//update target campaigns count. 
-			limitCampaign --;
+
 			/* add campaign to list of won campaigns */
 			pendingCampaign.setBudget(notificationMessage.getCostMillis()/1000.0);
 			currCampaign = pendingCampaign;
