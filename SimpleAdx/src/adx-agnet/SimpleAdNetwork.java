@@ -241,7 +241,9 @@ public class SimpleAdNetwork extends Agent {
 		pendingCampaign = new CampaignData(com);
 		System.out.println("Day " + day + ": Campaign opportunity - " + pendingCampaign);
 
-		BidderCampaign campBidder = new BidderCampaignEfficient();
+		//BidderCampaign campBidder = new BidderCampaignEfficient();
+		//BidderCampaign campBidder = new BidderCampaignMinimum();
+		BidderCampaign campBidder = new BidderCampaignMaximum();
 		long cmpBidMillis = campBidder.GenerateCampaignBid(com);
 		//System.out.println("######## i gave: " + cmpBidMillis + ",minimum was:" + cmpBidMillisMinimum);
 		System.out.println("Day " + day + ": Campaign total budget bid (millis): " + cmpBidMillis);

@@ -1,3 +1,4 @@
+import tau.tac.adx.agents.CampaignData;
 import tau.tac.adx.report.demand.CampaignOpportunityMessage;
 
 /**
@@ -8,15 +9,45 @@ import tau.tac.adx.report.demand.CampaignOpportunityMessage;
  * @author NAttar
  *
  */
-public class BidderCampaignMaximum extends BidderCampaign {
+public class BidderCampaignMaximum extends BidderCampaign 
+{
+
+	
+	/** will compute the maximum bid possible for campagin.
+	 * the bid Bn must satisfy : Bn < Cr * Rcampaignmax * Qn
+	 * where : 
+	 * Cr = campaign reach.
+	 * Rcampaignmax = factor from spec. 
+	 * Qn = our quality rating .
+	 * @return
+	 */
+	public long GetMaximumBid (CampaignData campaign)
+	{
+		
+		//get current quality rating of our agent .
+		double quality_rating = AgentData.GetQualityRating();
+		
+		double reach = campaign.getReachImps() ;
+		
+		double RCampaignMax = 0.001;
+		
+		double result = (reach * RCampaignMax * quality_rating) * 1000 - 1 ;
+		return (long) result ;
+		
+	}
+	
 
 	/* (non-Javadoc)
 	 * @see BidderCampaign#GenerateCampaignBid(tau.tac.adx.report.demand.CampaignOpportunityMessage)
 	 */
 	@Override
-	public long GenerateCampaignBid(CampaignOpportunityMessage msg) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public long GenerateCampaignBid(CampaignOpportunityMessage msg) 
+	{
 
+		CampaignData cmp = new CampaignData(msg);
+		
+		return GetMaximumBid (cmp);
+		
+	}
+	
 }

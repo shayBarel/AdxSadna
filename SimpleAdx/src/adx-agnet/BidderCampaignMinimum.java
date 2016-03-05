@@ -30,7 +30,7 @@ public class BidderCampaignMinimum extends BidderCampaign {
 		
 		double RCampaignMin = 0.0001;
 		
-		double result = (reach * RCampaignMin)/quality_rating ;
+		double result = ((reach * RCampaignMin)/quality_rating) * 1000 + 1;
 		return (long) result ;
 		
 	}

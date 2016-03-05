@@ -16,4 +16,9 @@ public class AgentData
 		return _QualityRating;
 	}
 	
+	public static void SetQualityRating (double new_qr) 
+	{
+		_QualityRating = new_qr;
+	}
+	
 }
