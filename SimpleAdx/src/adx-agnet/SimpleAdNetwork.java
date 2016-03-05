@@ -93,11 +93,21 @@ public class SimpleAdNetwork extends Agent {
 	 */
 	private CampaignData pendingCampaign;
 
-	/**
-	 * We maintain a collection (mapped by the campaign id) of the campaigns won
-	 * by our agent.
-	 */
-	private Map<Integer, CampaignData> myCampaigns;
+	
+
+	//class that saves data about the current competition.
+	private CompetitionData _CurrentCompetition;
+	
+	
+	public CompetitionData GetCurrCompetition() 
+	{
+		return _CurrentCompetition;
+	}
+
+	public void SetCurrCompetition(CompetitionData _competition) 
+	{
+		_CurrentCompetition = _competition;
+	}
 
 	/*
 	 * the bidBundle to be sent daily to the AdX
@@ -226,7 +236,10 @@ public class SimpleAdNetwork extends Agent {
 		 * to our allocated-campaigns list.
 		 */
 		System.out.println("Day " + day + ": Allocated campaign - " + campaignData);
-		myCampaigns.put(initialCampaignMessage.getId(), campaignData);
+		//myCampaigns.put(initialCampaignMessage.getId(), campaignData);
+		CompetitionData curr_competition = GetCurrCompetition();
+		curr_competition.GetMyCampaigns().put(initialCampaignMessage.getId(), campaignData);
+		
 	}
 
 	/**
@@ -310,22 +323,29 @@ public class SimpleAdNetwork extends Agent {
 				+ notificationMessage.getWinner();
 
 		
+		CompetitionData competition = GetCurrCompetition() ;
+
 		//handle won campaign (if any)
 		if ((pendingCampaign.id == adNetworkDailyNotification.getCampaignId())
 				&& (notificationMessage.getCostMillis() != 0)) {
 
-			//update target campaigns count. 
-			limitCampaign --;
 			/* add campaign to list of won campaigns */
 			pendingCampaign.setBudget(notificationMessage.getCostMillis()/1000.0);
 			currCampaign = pendingCampaign;
 			genCampaignQueries(currCampaign);
-			myCampaigns.put(pendingCampaign.id, pendingCampaign);
-
+			
+			//myCampaigns.put(pendingCampaign.id, pendingCampaign);
+			competition.GetMyCampaigns().put(pendingCampaign.id, pendingCampaign);
+			
 			campaignAllocatedTo = " WON at cost (Millis)"
 					+ notificationMessage.getCostMillis();
 		}
-
+		else
+		{
+			//add the campaign to other's campaigns .
+			competition.GetOthersCampaigns().put(pendingCampaign.id, pendingCampaign);
+		}
+		
 		System.out.println("Day " + day + ": " + campaignAllocatedTo
 				+ ". UCS Level set to " + notificationMessage.getServiceLevel()
 				+ " at price " + notificationMessage.getPrice()
@@ -348,7 +368,8 @@ public class SimpleAdNetwork extends Agent {
 	 * 
 	 */
 	protected void sendBidAndAds() {
-
+		
+		Set<CampaignData> allCamp = new HashSet<CampaignData>(myCampaigns.values());
 		bidBundle = new AdxBidBundle();
 
 		/*
@@ -371,12 +392,20 @@ public class SimpleAdNetwork extends Agent {
 		double rbid = 10.0;
 
 		//loop through all campaigns
+		CompetitionData competition = GetCurrCompetition();
+		Map<Integer, CampaignData> myCampaigns = competition.GetMyCampaigns();
 		for (Map.Entry<Integer, CampaignData> entry : myCampaigns.entrySet())
 		{
 			
 		    System.out.println(entry.getKey() + "/" + entry.getValue());
 		    
 		    CampaignData cmp = entry.getValue();
+		    
+
+
+
+		    rbid = PI_indicator.impBidder(cmp, allCamp, day, ucsTargetLevel);
+
 			/*
 			 * add bid entries w.r.t. each active campaign with remaining contracted
 			 * impressions.
@@ -453,16 +482,21 @@ public class SimpleAdNetwork extends Agent {
 
 		campaignReports.add(campaignReport);
 
+		CompetitionData competition = GetCurrCompetition();
+		
 		/*
 		 * for each campaign, the accumulated statistics from day 1 up to day
 		 * n-1 are reported
 		 */
-		for (CampaignReportKey campaignKey : campaignReport.keys()) {
+		for (CampaignReportKey campaignKey : campaignReport.keys()) 
+		{
 			int cmpId = campaignKey.getCampaignId();
 			CampaignStats cstats = campaignReport.getCampaignReportEntry(
 					campaignKey).getCampaignStats();
-			myCampaigns.get(cmpId).setStats(cstats);
-
+			//myCampaigns.get(cmpId).setStats(cstats);
+			competition.GetMyCampaigns().get(cmpId).setStats(cstats);
+			
+			
 			System.out.println("Day " + day + ": Updating campaign " + cmpId + " stats: "
 					+ cstats.getTargetedImps() + " tgtImps "
 					+ cstats.getOtherImps() + " nonTgtImps. Cost of imps is "
@@ -511,7 +545,7 @@ public class SimpleAdNetwork extends Agent {
 		/* initial bid between 0.1 and 0.2 */
 		ucsBid = 0.1 + random.nextDouble()/10.0;
 
-		myCampaigns = new HashMap<Integer, CampaignData>();
+
 		log.fine("AdNet " + getName() + " simulationSetup");
 	}
 
@@ -617,73 +651,5 @@ public class SimpleAdNetwork extends Agent {
 
 	}
 
-	private class CampaignData {
-		/* campaign attributes as set by server */
-		Long reachImps;
-		long dayStart;
-		long dayEnd;
-		Set<MarketSegment> targetSegment;
-		double videoCoef;
-		double mobileCoef;
-		int id;
-		private AdxQuery[] campaignQueries;//array of queries relvent for the campaign.
-
-		/* campaign info as reported */
-		CampaignStats stats;
-		double budget;
-
-		public CampaignData(InitialCampaignMessage icm) {
-			reachImps = icm.getReachImps();
-			dayStart = icm.getDayStart();
-			dayEnd = icm.getDayEnd();
-			targetSegment = icm.getTargetSegment();
-			videoCoef = icm.getVideoCoef();
-			mobileCoef = icm.getMobileCoef();
-			id = icm.getId();
-
-			stats = new CampaignStats(0, 0, 0);
-			budget = 0.0;
-		}
-
-		public void setBudget(double d) {
-			budget = d;
-		}
-
-		public CampaignData(CampaignOpportunityMessage com) {
-			dayStart = com.getDayStart();
-			dayEnd = com.getDayEnd();
-			id = com.getId();
-			reachImps = com.getReachImps();
-			targetSegment = com.getTargetSegment();
-			mobileCoef = com.getMobileCoef();
-			videoCoef = com.getVideoCoef();
-			stats = new CampaignStats(0, 0, 0);
-			budget = 0.0;
-		}
-
-		@Override
-		public String toString() {
-			return "Campaign ID " + id + ": " + "day " + dayStart + " to "
-					+ dayEnd + " " + targetSegment + ", reach: " + reachImps
-					+ " coefs: (v=" + videoCoef + ", m=" + mobileCoef + ")";
-		}
-
-		int impsTogo() {
-			return (int) Math.max(0, reachImps - stats.getTargetedImps());
-		}
-
-		void setStats(CampaignStats s) {
-			stats.setValues(s);
-		}
-
-		public AdxQuery[] getCampaignQueries() {
-			return campaignQueries;
-		}
-
-		public void setCampaignQueries(AdxQuery[] campaignQueries) {
-			this.campaignQueries = campaignQueries;
-		}
-
-	}
 
 }
