@@ -1,8 +1,9 @@
 
 import java.util.Random;
 
-import tau.tac.adx.agents.CampaignData;
 import tau.tac.adx.report.demand.CampaignOpportunityMessage;
+import tau.tac.adx.report.adn.MarketSegment;
+import java.util.*;
 
 public class BidderCampaignEfficient extends BidderCampaign
 {
@@ -22,7 +23,7 @@ public class BidderCampaignEfficient extends BidderCampaign
 	 * therefore the total number of impressions may be treated as a reserve
 	 * (upper bound) price for the auction.
 	 */
-	public long GenerateCampaignBid(CampaignOpportunityMessage msg) 
+	public long GenerateCampaignBid(CampaignOpportunityMessage msg, CompetitionData competition) 
 	{
 		
 		CampaignData cmp = new CampaignData(msg);
@@ -44,7 +45,14 @@ public class BidderCampaignEfficient extends BidderCampaign
 		cmpBidMillisMinimum = ((0.1666 * (double) cmpimps)) + 1 ;
 		cmpBidMillis = (long) cmpBidMillisMinimum;
 	
-		
+
+		//get the segment of campaign (only the first)
+		//TODO handle couple of segments.
+		Set<MarketSegment> seg = cmp.getTargetSegment();
+		//prepare a price index class, and use it to compute price.
+		PI_indicator price_index = new PI_indicator();
+		Map<Integer,CampaignData> market = competition.GetOthersCampaigns();
+		double pi = price_index.popularityOfSegment(seg, market);
 		return cmpBidMillis;
 	
 	}
