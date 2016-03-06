@@ -27,6 +27,7 @@ public UcsBidder(UcsHistory ucsHistroy,double ImpressionLeft) {
 		 avgUcsPrice = 0.0;
 		previousBid = 0.0;
 		this.ImpressionLeft = ImpressionLeft;
+		this.ucsHistroy = ucsHistroy;
 	}
 
 	// this astrategy is only for the first 20 days .

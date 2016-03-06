@@ -1,12 +1,12 @@
-01/12 12:45:29 INFO file.FileDatabase|infodb: database opened as C:\Nir\code\AdxSadna\AdxSadna\SimpleAdx\src\adx-server\infodb
-01/12 12:45:29 INFO common.BlockingViewerServer|viewer server started at *:4042
-01/12 10:45:29 INFO sim.Admin|adding manager for simulation type tac13adx
-01/12 10:45:29 INFO server.TACTGateway|TACT Server started at *:6502
-01/12 10:45:32 INFO server.TACTChannel|user WizardOfAdz logged in as WizardOfAdz@tact-1 with version 0.9.6 from 127.0.0.1
-01/12 10:45:32 INFO sim.Admin|created simulation 8
-01/12 10:46:00 FINE sim.Admin|Entering log for simulation 7
+06/03 22:21:31 INFO file.FileDatabase|infodb: database opened as /Users/shay/git/AdxSadna/SimpleAdx/src/adx-server/infodb
+06/03 22:21:31 INFO common.BlockingViewerServer|viewer server started at *:4042
+06/03 20:21:32 INFO sim.Admin|adding manager for simulation type tac13adx
+06/03 20:21:32 INFO server.TACTGateway|TACT Server started at *:6502
+06/03 20:21:34 INFO server.TACTChannel|user WizardOfAdz logged in as WizardOfAdz@tact-1 with version 0.9.6 from 127.0.0.1
+06/03 20:21:34 INFO sim.Admin|created simulation 18
+06/03 20:22:00 FINE sim.Admin|Entering log for simulation 17
 ************************************************************
-* Entering log for simulation 7
+* Entering log for simulation 17
 ************************************************************
 
 

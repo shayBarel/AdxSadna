@@ -1,10 +1,21 @@
 
 public class AgentUcsData {
 
+	int MAX_NUMBER_OF_AGENTS = 100;
 	
-	 double []UcsDailylevel; // should be initialized with all zero ( at start of the game )
-	 double []UcsDailyPrice; // same
+	 double UcsDailylevel[] = new double[MAX_NUMBER_OF_AGENTS]; // should be initialized with all zero ( at start of the game )
+	 double UcsDailyPrice[] = new double[MAX_NUMBER_OF_AGENTS]; // same
+	 
+	 
 	
+	public AgentUcsData() {
+		
+		for ( int i=0;i<MAX_NUMBER_OF_AGENTS;i++)
+		{
+			UcsDailylevel[i] = 0;
+			UcsDailyPrice[i] = 0;
+		}
+	}
 	public  double getUcsDailylevel(int i) {
 		return UcsDailylevel[i];
 	}

@@ -7,8 +7,8 @@
  */
 public class AgentData 
 {
-	static double []UcsDailylevel; // should be initialized with all zero ( at start of the game )
-	static double []UcsDailyPrice; // same
+	static double UcsDailylevel[] = new double[100]; // should be initialized with all zero ( at start of the game )
+	static double UcsDailyPrice[] = new double[100]; // same
 	static double reachedImpression;
 
 	public static double getUcsDailylevel(int i) {
