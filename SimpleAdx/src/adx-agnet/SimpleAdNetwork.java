@@ -46,6 +46,10 @@ import edu.umich.eecs.tac.props.BankStatus;
  * 
  */
 public class SimpleAdNetwork extends Agent {
+	
+	
+	public static int gameNum = 1;
+	
 
 	private final Logger log = Logger
 			.getLogger(SimpleAdNetwork.class.getName());
@@ -263,16 +267,36 @@ public class SimpleAdNetwork extends Agent {
 		 * Adjust ucs bid s.t. target level is achieved. Note: The bid for the
 		 * user classification service is piggybacked
 		 */
+		
+		UcsBidder ucsBidder;
+		UcsHistory ucsHistory = new UcsHistory();
+		// dummy code to be deleted ;
+		AgentUcsData TempAgentData = new AgentUcsData();
+		for (int i =0 ; i<=20;i++)
+		{
+			TempAgentData.setUcsDailylevel(day,i);
+			TempAgentData.setUcsDailyPrice(day,i*2);
+		}
+		ucsHistory.GameStats.put(2,TempAgentData); // for game 2 add this ucs data
+		
+		// end of dummy code this code should be filled with real games data !
+			
+		ucsBidder = new UcsBidder(ucsHistory,pendingCampaign.impsTogo());
+		ucsBidder.setUSCAvrages(day,2); // calculating the average.
 
+		
+		ucsBidder.setCurrentUcsLevel(0.0);
 		if (adNetworkDailyNotification != null) {
 			double ucsLevel = adNetworkDailyNotification.getServiceLevel();
-			
+			ucsBidder.setCurrentUcsLevel(ucsLevel);
+
 			//ucsBid = 0.1 + random.nextDouble()/10.0;
 			
 			//try to always win maximum UCS level.
-			ucsBid = 0.2;
+			ucsBid = ucsBidder.getUCSbid(day,gameNum);
 			System.out.println("Day " + day + ": ucs level reported: " + ucsLevel);
 		} else {
+			ucsBid = ucsBidder.getUCSbid(day,gameNum);
 			System.out.println("Day " + day + ": Initial ucs bid is " + ucsBid);
 		}
 
@@ -344,7 +368,8 @@ public class SimpleAdNetwork extends Agent {
 	 * 
 	 */
 	protected void sendBidAndAds() {
-
+		
+		Set<CampaignData> allCamp = new HashSet<CampaignData>(myCampaigns.values());
 		bidBundle = new AdxBidBundle();
 
 		/*
@@ -379,7 +404,7 @@ public class SimpleAdNetwork extends Agent {
 
 
 
-		    rbid = PI_indicator.impBidder(cmp, myCampaigns, day, ucsTargetLevel);
+		    rbid = PI_indicator.impBidder(cmp, allCamp, day, ucsTargetLevel);
 
 			/*
 			 * add bid entries w.r.t. each active campaign with remaining contracted
