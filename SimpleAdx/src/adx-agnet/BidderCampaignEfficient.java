@@ -51,7 +51,7 @@ public class BidderCampaignEfficient extends BidderCampaign
 		Set<MarketSegment> seg = cmp.getTargetSegment();
 		//prepare a price index class, and use it to compute price.
 		PI_indicator price_index = new PI_indicator();
-		Map<Integer,CampaignData> market = competition.GetOthersCampaigns();
+		Map<Integer,CampaignData> market = competition.GetAllCampaigns();
 		double pi = price_index.popularityOfSegment(seg, market);
 		return cmpBidMillis;
 	

@@ -392,8 +392,7 @@ public class SimpleAdNetwork extends Agent {
 
 		//loop through all campaigns
 		CompetitionData competition = GetCurrCompetition();
-		Set<CampaignData> allCampaigns = new HashSet<CampaignData>(competition.GetAllCampaigns().values());
-
+		Map <Integer, CampaignData> allCampaigns = competition.GetAllCampaigns();
 		Map<Integer, CampaignData> myCampaigns = competition.GetMyCampaigns();
 		for (Map.Entry<Integer, CampaignData> entry : myCampaigns.entrySet())
 		{
