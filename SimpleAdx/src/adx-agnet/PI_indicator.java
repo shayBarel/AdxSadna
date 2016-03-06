@@ -1,3 +1,4 @@
+import java.util.Map;
 import java.util.Set;
 
 import tau.tac.adx.report.adn.MarketSegment;
@@ -7,12 +8,13 @@ import tau.tac.adx.agents.CampaignData;
 public class PI_indicator {
 	//getting MarketSegment, and set of campaignData.
 	//return double - the MarketSegment popularity.
-	public static double popularityOfSegment(Set<MarketSegment> seg, Set<CampaignData> market)
+	public static double popularityOfSegment(Set<MarketSegment> seg, Map <Integer, CampaignData> market)
 	{
 		double pop = 0;
 		long reach = 0, size = 0, days = 0;
-		for(CampaignData cd : market)
+		for(Map.Entry<Integer, CampaignData> entery : market.entrySet())
 		{
+			CampaignData cd = entery.getValue();
 			days = cd.getDayEnd() - cd.getDayStart();
 			//size = cd.getTargetSegment().getSize();//not working.
 			size = 500;//for test
@@ -31,7 +33,7 @@ public class PI_indicator {
 	}
 	double MinBidValue = 0;
 	
-	static double impBidder(CampaignData cd, Set<CampaignData> market, int day, double ucsTargetLevel)
+	static double impBidder(CampaignData cd, Map <Integer, CampaignData> market, int day, double ucsTargetLevel)
 	{
 		double bid = 0.0;
 		double pop = popularityOfSegment(cd.getTargetSegment(), market);
