@@ -82,4 +82,40 @@ public class CampaignData {
 		this.campaignQueries = campaignQueries;
 	}
 
+	public Set<MarketSegment> getTargetSegment() {
+		return targetSegment;
+	}
+
+	public void setTargetSegment(Set<MarketSegment> targetSegment) {
+		this.targetSegment = targetSegment;
+	}
+	
+	public long getDayStart() {
+		return dayStart;
+	}
+
+	public void setDayStart(long dayStart) {
+		this.dayStart = dayStart;
+	}
+
+	public long getDayEnd() {
+		return dayEnd;
+	}
+
+	public void setDayEnd(long dayEnd) {
+		this.dayEnd = dayEnd;
+	}
+
+	public Long getReachImps() {
+		return reachImps;
+	}
+
+	public void setReachImps(Long reachImps) {
+		this.reachImps = reachImps;
+	}
+
+	public CampaignStats getStats() {
+		return stats;
+	}
+	
 }
