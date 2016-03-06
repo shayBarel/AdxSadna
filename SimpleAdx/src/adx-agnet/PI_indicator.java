@@ -3,7 +3,6 @@ import java.util.Set;
 
 import tau.tac.adx.report.adn.MarketSegment;
 
-import tau.tac.adx.agents.CampaignData;
 
 public class PI_indicator {
 	//getting MarketSegment, and set of campaignData.
