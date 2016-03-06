@@ -175,7 +175,7 @@ public class SimpleAdNetwork extends Agent {
 		} catch (NullPointerException e) {
 			this.log.log(Level.SEVERE,
 					"Exception thrown while trying to parse message." + e);
-			return;
+			throw e;
 		}
 	}
 
