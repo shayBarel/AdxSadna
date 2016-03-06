@@ -53,7 +53,7 @@ public class BidderCampaignEfficient extends BidderCampaign
 		PI_indicator price_index = new PI_indicator();
 		Map<Integer,CampaignData> market = competition.GetOthersCampaigns();
 		double pi = price_index.popularityOfSegment(seg, market);
-		return cmpBidMillis;
+		return (long) pi;
 	
 	}
 	
