@@ -259,7 +259,8 @@ public class SimpleAdNetwork extends Agent {
 		//BidderCampaign campBidder = new BidderCampaignEfficient();
 		//BidderCampaign campBidder = new BidderCampaignMinimum();
 		BidderCampaign campBidder = new BidderCampaignMaximum();
-		long cmpBidMillis = campBidder.GenerateCampaignBid(com);
+		CompetitionData competition = GetCurrCompetition();
+		long cmpBidMillis = campBidder.GenerateCampaignBid(com,competition);
 		//System.out.println("######## i gave: " + cmpBidMillis + ",minimum was:" + cmpBidMillisMinimum);
 		System.out.println("Day " + day + ": Campaign total budget bid (millis): " + cmpBidMillis);
 
@@ -334,7 +335,6 @@ public class SimpleAdNetwork extends Agent {
 			currCampaign = pendingCampaign;
 			genCampaignQueries(currCampaign);
 			
-			//myCampaigns.put(pendingCampaign.id, pendingCampaign);
 			competition.GetMyCampaigns().put(pendingCampaign.id, pendingCampaign);
 			
 			campaignAllocatedTo = " WON at cost (Millis)"
@@ -369,7 +369,6 @@ public class SimpleAdNetwork extends Agent {
 	 */
 	protected void sendBidAndAds() {
 		
-		Set<CampaignData> allCamp = new HashSet<CampaignData>(myCampaigns.values());
 		bidBundle = new AdxBidBundle();
 
 		/*
@@ -393,6 +392,8 @@ public class SimpleAdNetwork extends Agent {
 
 		//loop through all campaigns
 		CompetitionData competition = GetCurrCompetition();
+		Set<CampaignData> allCampaigns = new HashSet<CampaignData>(competition.GetAllCampaigns().values());
+
 		Map<Integer, CampaignData> myCampaigns = competition.GetMyCampaigns();
 		for (Map.Entry<Integer, CampaignData> entry : myCampaigns.entrySet())
 		{
@@ -404,7 +405,7 @@ public class SimpleAdNetwork extends Agent {
 
 
 
-		    rbid = PI_indicator.impBidder(cmp, allCamp, day, ucsTargetLevel);
+		    rbid = PI_indicator.impBidder(cmp, allCampaigns, day, ucsTargetLevel);
 
 			/*
 			 * add bid entries w.r.t. each active campaign with remaining contracted
@@ -420,7 +421,7 @@ public class SimpleAdNetwork extends Agent {
 	
 				int entCount = 0;
 	
-				for (AdxQuery query : cmp.campaignQueries) 
+				for (AdxQuery query : cmp.getCampaignQueries()) 
 				{
 					
 					if (cmp.impsTogo() - entCount > 0) 
@@ -493,7 +494,7 @@ public class SimpleAdNetwork extends Agent {
 			int cmpId = campaignKey.getCampaignId();
 			CampaignStats cstats = campaignReport.getCampaignReportEntry(
 					campaignKey).getCampaignStats();
-			//myCampaigns.get(cmpId).setStats(cstats);
+			
 			competition.GetMyCampaigns().get(cmpId).setStats(cstats);
 			
 			
@@ -644,9 +645,9 @@ public class SimpleAdNetwork extends Agent {
 					campaignData.targetSegment, Device.pc, AdType.video));
 		}
 
-		campaignData.campaignQueries = new AdxQuery[campaignQueriesSet.size()];
-		campaignQueriesSet.toArray(campaignData.campaignQueries);
-		System.out.println("!!!!!!!!!!!!!!!!!!!!!!"+Arrays.toString(campaignData.campaignQueries)+"!!!!!!!!!!!!!!!!");
+		campaignData.setCampaignQueries(new AdxQuery[campaignQueriesSet.size()]);
+		campaignQueriesSet.toArray(campaignData.getCampaignQueries());
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!"+Arrays.toString(campaignData.getCampaignQueries())+"!!!!!!!!!!!!!!!!");
 		
 
 	}

@@ -9,14 +9,38 @@ import java.util.*;
 public class CompetitionData 
 {
 
+	
+	public CompetitionData ()
+	{
+		_othersCampaigns = new HashMap<Integer, CampaignData>();
+		_myCampaigns = new HashMap<Integer, CampaignData>();
+	}
+	
+	
 	/**
-	 * We maintain a collection (mapped by the campaign id) of the campaigns won
-	 * by our agent.
+	 * We maintain 2 collections (2 disjoint sets),
+	 *  mapped by the campaign id: 
+	 *  1. one for campaigns won by our agent.
+	 *  2. one for campaigns won by other agents.
+	 * 
 	 */
 	Map <Integer, CampaignData> _myCampaigns;
 	//saves other agents campaigns .
 	Map <Integer, CampaignData> _othersCampaigns;
 	
+	
+	/** 
+	 * build a map of all campagins
+	 * (union of the 2 collections) 
+	 * @return
+	 */
+	public Map<Integer, CampaignData> GetAllCampaigns ()
+	{
+		Map<Integer, CampaignData> allCampaigns = new HashMap<Integer, CampaignData> ();
+		allCampaigns.putAll(GetMyCampaigns());
+		allCampaigns.putAll(GetOthersCampaigns());
+		return allCampaigns;
+	}
 	
 	public Map<Integer, CampaignData> GetMyCampaigns() 
 	{
@@ -28,11 +52,7 @@ public class CompetitionData
 		this._myCampaigns = myCampaigns;
 	}
 
-	public CompetitionData ()
-	{
-		_othersCampaigns = new HashMap<Integer, CampaignData>();
-		_myCampaigns = new HashMap<Integer, CampaignData>();
-	}
+
 	
 	public Map <Integer , CampaignData> GetOthersCampaigns() 
 	{

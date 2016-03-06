@@ -9,6 +9,6 @@ public abstract class BidderCampaign
 	}
 	
 	//supposed to generate the campaign bid .
-	abstract public long GenerateCampaignBid(CampaignOpportunityMessage msg);
+	abstract public long GenerateCampaignBid(CampaignOpportunityMessage msg, CompetitionData competition);
 
 }

@@ -42,7 +42,7 @@ public class BidderCampaignMaximum extends BidderCampaign
 	 * @see BidderCampaign#GenerateCampaignBid(tau.tac.adx.report.demand.CampaignOpportunityMessage)
 	 */
 	@Override
-	public long GenerateCampaignBid(CampaignOpportunityMessage msg) 
+	public long GenerateCampaignBid(CampaignOpportunityMessage msg, CompetitionData competition) 
 	{
 
 		CampaignData cmp = new CampaignData(msg);
