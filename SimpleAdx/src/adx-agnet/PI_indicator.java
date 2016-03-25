@@ -11,14 +11,23 @@ public class PI_indicator {
 	{
 		double pop = 0;
 		long reach = 0, size = 0, days = 0;
-		for(Map.Entry<Integer, CampaignData> entery : market.entrySet())
+		for(MarketSegment s : seg)
 		{
-			CampaignData cd = entery.getValue();
-			days = cd.getDayEnd() - cd.getDayStart();
-			//size = cd.getTargetSegment().getSize();//not working.
-			size = 500;//for test
-			reach = cd.getReachImps();
-			pop += reach / (size * days);
+			for(Map.Entry<Integer, CampaignData> entery : market.entrySet())
+			{
+				CampaignData cd = entery.getValue();
+				days = cd.getDayEnd() - cd.getDayStart();
+				for(MarketSegment ms : cd.getTargetSegment())
+				{
+					if(ms == s)
+					{
+						//size = cd.getTargetSegment().getSize();//not working.
+						size = 500;//for test
+						reach = cd.getReachImps();
+						pop += reach / (size * days);
+					}
+				}
+			}
 		}
 		return pop;
 	}
