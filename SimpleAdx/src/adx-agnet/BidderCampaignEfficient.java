@@ -30,29 +30,20 @@ public class BidderCampaignEfficient extends BidderCampaign
 		
 		long cmpimps = msg.getReachImps();
 		//System.out.println("######## server demanded: " + cmpimps);
-		//Random random = new Random();
-		//long cmpBidMillis = random.nextInt((int)cmpimps);
-		
-		long cmpBidMillis = 0;
-		double cmpBidMillisMinimum = 0;
-		
-		
-		//assumption- we are interested in more campaigns.
-	
-		//make a bid on the campaign.
-		//based on doubling the target impression amount by a fixed fraction.
-		//(try to be lower than others)
-		cmpBidMillisMinimum = ((0.1666 * (double) cmpimps)) + 1 ;
-		cmpBidMillis = (long) cmpBidMillisMinimum;
 	
 
 		//get the segment of campaign (only the first)
-		//TODO handle couple of segments.
-		Set<MarketSegment> seg = cmp.getTargetSegment();
-		//prepare a price index class, and use it to compute price.
-		PI_indicator price_index = new PI_indicator();
+		//handle couple of segments.
+		Set<MarketSegment> segments = cmp.getTargetSegment();
+		//get start and end days 
+		int dayStart = (int) cmp.getDayStart();
+		int dayEnd =  (int) cmp.getDayEnd();
+
+		//get campaigns in market 
 		Map<Integer,CampaignData> market = competition.GetAllCampaigns();
-		double pi = price_index.popularityOfSegment(seg, market);
+		
+		//call price index class, to compute price.
+		double pi = PI_indicator.popularityMultiSegmentsMultiDays(segments, market, dayStart, dayEnd);
 		return (long) pi;
 	
 	}
