@@ -11,23 +11,26 @@ public class PI_indicator {
 	{
 		double pop = 0;
 		long reach = 0, days = 0;
-		double segmentSize = 0 ;
-		
+
 		for(Map.Entry<Integer, CampaignData> entery : market.entrySet())
 		{
 			CampaignData cd = entery.getValue();
 			days = (cd.getDayEnd() - cd.getDayStart()) + 1;
-			for(MarketSegment ms : cd.getTargetSegment())
+			
+			//if market campaign has the segment we want,
+			//include it in calculation
+			Set<MarketSegment> marketCampaignSegments = cd.getTargetSegment();
+			if (marketCampaignSegments.contains(seg))
 			{
-				if(ms.equals(seg))
+
+				if(day <= cd.getDayEnd() && day >= cd.getDayStart())
 				{
-					if(day <= cd.getDayEnd() && day >= cd.getDayStart())
-					{
-						segmentSize = WeightSegment(seg);
-						reach = cd.getReachImps();
-						pop += ((double)reach) / (segmentSize * ((double)days));
-					}
+					double segmentsSize = 0 ;
+					segmentsSize = WeightGroupSegments(marketCampaignSegments);
+					reach = cd.getReachImps();
+					pop += ((double)reach) / (segmentsSize * ((double)days));
 				}
+				
 			}
 		}
 		
@@ -73,7 +76,7 @@ public class PI_indicator {
 	
 	static double WeightSegment (MarketSegment segment)
 	{
-		return 500 ;
+		return 0.05 ;
 	}
 	
 	/**
