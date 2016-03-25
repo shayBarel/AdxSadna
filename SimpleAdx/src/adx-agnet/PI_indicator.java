@@ -7,7 +7,7 @@ import tau.tac.adx.report.adn.MarketSegment;
 public class PI_indicator {
 	//getting MarketSegment, and set of campaignData.
 	//return double - the MarketSegment popularity.
-	public static double popularityOfSegment(Set<MarketSegment> seg, Map <Integer, CampaignData> market)
+	public static double popularityOfSegment(Set<MarketSegment> seg, Map <Integer, CampaignData> market, int day)
 	{
 		double pop = 0;
 		long reach = 0, size = 0, days = 0;
@@ -19,12 +19,15 @@ public class PI_indicator {
 				days = cd.getDayEnd() - cd.getDayStart();
 				for(MarketSegment ms : cd.getTargetSegment())
 				{
-					if(ms == s)
+					if(ms.equals(s))
 					{
-						//size = cd.getTargetSegment().getSize();//not working.
-						size = 500;//for test
-						reach = cd.getReachImps();
-						pop += reach / (size * days);
+						if(day <= cd.getDayEnd() && day >= cd.getDayStart())
+						{
+							//size = ms.getSize();//not working.
+							size = 500;//for test
+							reach = cd.getReachImps();
+							pop += reach / (size * days);
+						}
 					}
 				}
 			}
