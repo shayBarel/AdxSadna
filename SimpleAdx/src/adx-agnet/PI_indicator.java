@@ -10,15 +10,16 @@ public class PI_indicator {
 	public static double popularityOfSegment(Set<MarketSegment> seg, Map <Integer, CampaignData> market)
 	{
 		double pop = 0;
-		long reach = 0, size = 0, days = 0;
+		long reach = 0, days = 0;
+		double size = 0;
 		for(Map.Entry<Integer, CampaignData> entery : market.entrySet())
 		{
 			CampaignData cd = entery.getValue();
 			days = cd.getDayEnd() - cd.getDayStart();
 			//size = cd.getTargetSegment().getSize();//not working.
-			size = 500;//for test
+			size = 0.05;//for test
 			reach = cd.getReachImps();
-			pop += reach / (size * days);
+			pop += (double) reach / (double) (size * days);
 		}
 		return pop;
 	}
