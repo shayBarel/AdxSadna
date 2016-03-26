@@ -7,28 +7,35 @@ import tau.tac.adx.report.adn.MarketSegment;
 public class PI_indicator {
 	//getting MarketSegment, and set of campaignData.
 	//return double - the MarketSegment popularity.
-	public static double popularityOfSegment(MarketSegment seg, Map <Integer, CampaignData> market, int day)
+	
+	//segment is a combination of 3 attributes i.e. <young, high, male>...
+	//or combinations of 2 or 1 attributes.
+	//the combination is given as a Set .
+	public static double popularityOfSegment(Set<MarketSegment> segment, Map <Integer, CampaignData> market, int day)
 	{
+		
+		//init. sum
 		double pop = 0;
-		long reach = 0, days = 0;
 
 		for(Map.Entry<Integer, CampaignData> entery : market.entrySet())
 		{
 			CampaignData cd = entery.getValue();
-			days = (cd.getDayEnd() - cd.getDayStart()) + 1;
-			
-			//if market campaign has the segment we want,
-			//include it in calculation
+
+			//if market campaign is for the segment we want,
+			//(exact match), then include it in calculation
+			//(compare 2 sets of segments)
+			//TODO is not precise, possible partial overlap of segments.
 			Set<MarketSegment> marketCampaignSegments = cd.getTargetSegment();
-			if (marketCampaignSegments.contains(seg))
+			if (marketCampaignSegments.equals(segment))
 			{
 
 				if(day <= cd.getDayEnd() && day >= cd.getDayStart())
 				{
-					double segmentsSize = 0 ;
-					segmentsSize = WeightGroupSegments(marketCampaignSegments);
-					reach = cd.getReachImps();
-					pop += ((double)reach) / (segmentsSize * ((double)days));
+					double segmentSize = WeightSegment(marketCampaignSegments);
+					long reach = cd.getReachImps();
+					long days = (cd.getDayEnd() - cd.getDayStart()) + 1;
+					
+					pop += ((double)reach) / (segmentSize * ((double)days));
 				}
 				
 			}
@@ -38,63 +45,61 @@ public class PI_indicator {
 	}
 	
 	/**
-	 * calculate the popularity of a group of segments, 
+	 * calculate the popularity of a segment, 
 	 * during a group of days .
-	 * @param segments
+	 * @param segment
 	 * @param market
 	 * @param dayStart
 	 * @param dayEnd
 	 * @return
 	 */
-	public static double popularityMultiSegmentsMultiDays
-		(Set<MarketSegment> segments, Map <Integer, CampaignData> market, 
+	public static double popularitySegmentMultiDays
+		(Set<MarketSegment> segment, Map <Integer, CampaignData> market, 
 				int dayStart, int dayEnd)
 	{
 		
 		double sum_popularity = 0 ;
-		//loop on all segments 
-		for(MarketSegment s : segments)
+
+		//for the segment, loop on all days .
+		for (int i=dayStart; i<=dayEnd; i++)
 		{
-			//for each segment, loop on all days .
-			for (int i=dayStart; i<=dayEnd; i++)
+			if (popularityOfSegment(segment, market, i) > 0)
 			{
 				//add to the sum, the popularity of that segment in that day.
-				sum_popularity += WeightSegment(s) * popularityOfSegment(s, market, i);
+				sum_popularity += popularityOfSegment(segment, market, i);
 			}
 		}
 		
+		
 		//finished iterating. 
-		//now divide the sum by the "weights". (size of days and weight of group of segments)
+		//now divide the sum by the "weights". (size of days)
 		int numdays = (dayEnd - dayStart) + 1;
-		double weightGroupSegments = WeightGroupSegments(segments) ;
-		
-		
-		double result = sum_popularity / (((double)(numdays))*weightGroupSegments);
+		double result = sum_popularity / (double)(numdays);
 		return result ;
 	}
 	
 	
-	static double WeightSegment (MarketSegment segment)
+	static double WeightSegment (Set<MarketSegment> segment)
 	{
-		return 0.05 ;
+		return 0.25 ;
 	}
 	
-	/**
-	 * return a weight of a group of segments .
-	 * @param segments
-	 * @return
-	 */
-	static double WeightGroupSegments (Set<MarketSegment> segments)
-	{
-		double sum_weight = 0 ;
-		
-		//just iterate on segments, and sum their weights.
-		for (MarketSegment s: segments)
-		{
-			sum_weight += WeightSegment(s);
-		}
-		return sum_weight;
-	}
+//	/**
+//	 * return a weight of a group of segments .
+//	 * @param segments
+//	 * @return
+//	 */
+//	static double WeightGroupSegments (Set<MarketSegment> segments)
+//	{
+//		double sum_weight = 0 ;
+//		
+//		//just iterate on segments, and sum their weights.
+//		for (MarketSegment s: segments)
+//		{
+//			sum_weight += WeightSegment(s);
+//		}
+//		return sum_weight;
+//	}
 	
 	public static double urgency(CampaignData cd, double reached, int day)
 	{
