@@ -102,19 +102,24 @@ public class PI_indicator {
 		long days = cd.getDayEnd() - cd.getDayStart();
 		if(days - day > days/3)
 			urg *= 1.2;
+		else
+			urg = urg / 1.2;
 		return urg;
 	}
 	double MinBidValue = 0;
 	
+	static double computeBidUrg(double pop, double reached, double urg)
+	{
+		return 0.5;
+	}
 	static double impBidder(CampaignData cd, Map <Integer, CampaignData> market, int day, double ucsTargetLevel)
 	{
-		double bid = 0.0;
-		//double pop = popularityOfSegment(cd.getTargetSegment(), market, day);
-		double pop = cd.getReachImps() ;
+		double bid = 0.5;//need to check min bid.
+		double pop = popularityMultiSegmentsMultiDays(cd.getTargetSegment(), market, day - 1, day);
 		double reached = cd.getStats().getTargetedImps()/cd.getReachImps();
 		double urg = urgency(cd, reached, day);
-		
-		if(pop > 0.4)
+		double bidUrg = computeBidUrg(pop, reached, urg);
+		if(bidUrg > 0.4)
 			bid = 0.5;
 		else
 			bid = 0.7;
