@@ -26,7 +26,7 @@ public class BidderCampaignEfficient extends BidderCampaign
 	public long GenerateCampaignBid(CampaignOpportunityMessage msg, CompetitionData competition) 
 	{
 		
-		CampaignData cmp = new CampaignData(msg);
+		CampaignData pending_campaign = new CampaignData(msg);
 		
 		long cmpimps = msg.getReachImps();
 		//System.out.println("######## server demanded: " + cmpimps);
@@ -34,16 +34,17 @@ public class BidderCampaignEfficient extends BidderCampaign
 
 		//get the segment of campaign (only the first)
 		//handle couple of segments.
-		Set<MarketSegment> segments = cmp.getTargetSegment();
+		Set<MarketSegment> segment = pending_campaign.getTargetSegment();
 		//get start and end days 
-		int dayStart = (int) cmp.getDayStart();
-		int dayEnd =  (int) cmp.getDayEnd();
+		int dayStart = (int) pending_campaign.getDayStart();
+		int dayEnd =  (int) pending_campaign.getDayEnd();
 
 		//get campaigns in market 
 		Map<Integer,CampaignData> market = competition.GetAllCampaigns();
+		market.put(pending_campaign.id, pending_campaign); //consider also the pending campaign
 		
 		//call price index class, to compute price.
-		double pi = PI_indicator.popularityMultiSegmentsMultiDays(segments, market, dayStart, dayEnd);
+		double pi = PI_indicator.popularitySegmentMultiDays(segment, market, dayStart, dayEnd);
 		return (long) pi;
 	
 	}
