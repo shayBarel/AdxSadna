@@ -351,6 +351,9 @@ public class SimpleAdNetwork extends Agent {
 				+ ". UCS Level set to " + notificationMessage.getServiceLevel()
 				+ " at price " + notificationMessage.getPrice()
 				+ " Quality Score is: " + notificationMessage.getQualityScore());
+		
+		//save quality rating 
+		AgentData.GetInstance().SetQualityRating(notificationMessage.getQualityScore());
 	}
 
 	/**
