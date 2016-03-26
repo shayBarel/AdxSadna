@@ -120,10 +120,12 @@ public class PI_indicator {
 	static double impBidder(CampaignData cd, Map <Integer, CampaignData> market, int day, double ucsTargetLevel)
 	{
 		double bid = 0.5;//need to check min bid.
-		double pop = popularityMultiSegmentsMultiDays(cd.getTargetSegment(), market, day - 1, day);
+		double pop = popularitySegmentMultiDays(cd.getTargetSegment(), market, day - 1, day);
 		double reached = cd.getStats().getTargetedImps()/cd.getReachImps();
 		double urg = urgency(cd, reached, day);
 		double bidUrg = computeBidUrg(pop, reached, urg);
+		
+		
 		if(bidUrg > 0.4)
 			bid = 0.5;
 		else
