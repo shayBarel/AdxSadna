@@ -30,6 +30,10 @@ public class CampaignData {
 	CampaignStats stats;
 	double budget;
 
+	public double getBudget() {
+		return budget;
+	}
+
 	public CampaignData(InitialCampaignMessage icm) {
 		reachImps = icm.getReachImps();
 		dayStart = icm.getDayStart();

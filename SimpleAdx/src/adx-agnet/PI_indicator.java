@@ -115,14 +115,18 @@ public class PI_indicator {
 	
 	static double computeBidUrg(double pop, double reached, double urg)
 	{
+		
 		return 0.5;
 	}
 	static double impBidder(CampaignData cd, Map <Integer, CampaignData> market, int day, double ucsTargetLevel)
 	{
-		double bid = 0.5;//need to check min bid.
+		double bid = 0.5;//TODO check min bid.
 		double pop = popularitySegmentMultiDays(cd.getTargetSegment(), market, day - 1, day);
-		double reached = cd.getStats().getTargetedImps()/cd.getReachImps();
+		double reached = cd.getStats().getTargetedImps()/cd.getReachImps();//percentage of completion
 		double urg = urgency(cd, reached, day);
+		double budget = cd.getBudget();
+		
+		
 		double bidUrg = computeBidUrg(pop, reached, urg);
 		
 		
