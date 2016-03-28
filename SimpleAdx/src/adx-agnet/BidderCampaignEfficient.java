@@ -26,33 +26,25 @@ public class BidderCampaignEfficient extends BidderCampaign
 	public long GenerateCampaignBid(CampaignOpportunityMessage msg, CompetitionData competition) 
 	{
 		
-		CampaignData cmp = new CampaignData(msg);
+		CampaignData pending_campaign = new CampaignData(msg);
 		
 		long cmpimps = msg.getReachImps();
 		//System.out.println("######## server demanded: " + cmpimps);
-		//Random random = new Random();
-		//long cmpBidMillis = random.nextInt((int)cmpimps);
-		
-		long cmpBidMillis = 0;
-		double cmpBidMillisMinimum = 0;
-		
-		
-		//assumption- we are interested in more campaigns.
-	
-		//make a bid on the campaign.
-		//based on doubling the target impression amount by a fixed fraction.
-		//(try to be lower than others)
-		cmpBidMillisMinimum = ((0.1666 * (double) cmpimps)) + 1 ;
-		cmpBidMillis = (long) cmpBidMillisMinimum;
 	
 
 		//get the segment of campaign (only the first)
-		//TODO handle couple of segments.
-		Set<MarketSegment> seg = cmp.getTargetSegment();
-		//prepare a price index class, and use it to compute price.
-		PI_indicator price_index = new PI_indicator();
+		//handle couple of segments.
+		Set<MarketSegment> segment = pending_campaign.getTargetSegment();
+		//get start and end days 
+		int dayStart = (int) pending_campaign.getDayStart();
+		int dayEnd =  (int) pending_campaign.getDayEnd();
+
+		//get campaigns in market 
 		Map<Integer,CampaignData> market = competition.GetAllCampaigns();
-		double pi = price_index.popularityOfSegment(seg, market);
+		market.put(pending_campaign.id, pending_campaign); //consider also the pending campaign
+		
+		//call price index class, to compute price.
+		double pi = PI_indicator.popularitySegmentMultiDays(segment, market, dayStart, dayEnd);
 		return (long) pi;
 	
 	}

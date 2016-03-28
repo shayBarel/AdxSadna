@@ -136,6 +136,10 @@ public class SimpleAdNetwork extends Agent {
 	public SimpleAdNetwork() {
 		campaignReports = new LinkedList<CampaignReport>();
 		SetCurrCompetition(new CompetitionData());
+		
+		
+		//change default log level
+		log.setLevel(Level.FINE);
 	}
 
 	@Override
@@ -351,6 +355,9 @@ public class SimpleAdNetwork extends Agent {
 				+ ". UCS Level set to " + notificationMessage.getServiceLevel()
 				+ " at price " + notificationMessage.getPrice()
 				+ " Quality Score is: " + notificationMessage.getQualityScore());
+		
+		//save quality rating 
+		AgentData.GetActiveAgentInstance().SetQualityRating(notificationMessage.getQualityScore());
 	}
 
 	/**
@@ -405,7 +412,7 @@ public class SimpleAdNetwork extends Agent {
 
 
 
-		    rbid = PI_indicator.impBidder(cmp, allCampaigns, day, ucsTargetLevel);
+		    rbid = PI_indicator.impBidder(cmp, myCampaigns, allCampaigns, day, ucsTargetLevel);
 
 			/*
 			 * add bid entries w.r.t. each active campaign with remaining contracted
@@ -538,6 +545,9 @@ public class SimpleAdNetwork extends Agent {
 
 	@Override
 	protected void simulationSetup() {
+		
+		Test1();
+		
 		Random random = new Random();
 
 		day = 0;
@@ -549,7 +559,7 @@ public class SimpleAdNetwork extends Agent {
 
 		log.fine("AdNet " + getName() + " simulationSetup");
 	}
-
+	
 	@Override
 	protected void simulationFinished() {
 		campaignReports.clear();
