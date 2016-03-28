@@ -24,7 +24,7 @@ public class UcsHistory {
 	public double getUcsDailylevel(int CurrentDay,int gameNum)
 	{
 		AgentUcsData agent = GameStats.get(gameNum);
-		return agent.getUcsDailyPrice(CurrentDay);
+		return agent.getUcsDailylevel(CurrentDay);
 	}
 	
 	public double getUcsDailyPrice(int CurrentDay,int gameNum)

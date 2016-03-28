@@ -1,6 +1,9 @@
 
 //import org.apache.commons.math3.stat.regression.SimpleRegression;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class UcsBidder {
 	
 	
@@ -18,7 +21,7 @@ public class UcsBidder {
 	// UCS DAILY RESULT ON array / classs 
 	// 
 	UcsHistory ucsHistroy;
-	
+	private final Logger log = Logger.getLogger(SimpleAdNetwork.class.getName());	
 	
 	
 public UcsBidder(UcsHistory ucsHistroy,double ImpressionLeft) {
@@ -58,21 +61,34 @@ public UcsBidder(UcsHistory ucsHistroy,double ImpressionLeft) {
 	  {
 		  if(getImpressionLeft()==0)
 		  {
+			  log.log(Level.FINE, "Ucs impression left is 0");
+
 			  TargetUCS=0;
 		  }
 		  else if (getImpressionLeft()<5000)
 		  {
+			  log.log(Level.FINE, "Ucs impression left is 5000");
+
 			  TargetUCS=0.65; 
 		  }
 		  else if (getImpressionLeft()<15000)
 		  {
+			  
+			  log.log(Level.FINE, "Ucs impression left is 15000");
+
 			  TargetUCS=0.75; 
 		  }
 		  else {
+			  
+			  log.log(Level.FINE, "Ucs impression left is more than 15000");
+
 			  TargetUCS=0.85; 
 		  }
 		  
 		  if (NumOfDay < 5){
+			  
+			  log.log(Level.FINE, "Ucs Num of days is 5");
+
 			  TargetUCS = 0.95;
 		  }	  
 		  
@@ -90,6 +106,9 @@ public UcsBidder(UcsHistory ucsHistroy,double ImpressionLeft) {
 		  double ucsBid2;
 		  
 		  if (day < 20 ){
+			  
+			  log.log(Level.FINE, "UcsBid algo for days less than 20");
+			  
 			  ucsBid1 = Math.min(0.12 + 0.19*getTargetUCS()
 					  + (0.1-day*0.016),0.12 -day*0.01
 					  + previousBid*(1+(getTargetUCS()-avgUSCLevel)));
@@ -103,10 +122,16 @@ public UcsBidder(UcsHistory ucsHistroy,double ImpressionLeft) {
 		  }
 		  else {
 			  
+			  log.log(Level.FINE, "UcsBid algo for days follow 20 ( regression ) ");
+
 			  ucsBid =  Math.random()*4; // to be replaced by regression.
 			  
 		  }
 		  previousBid = ucsBid;
+		  
+		  
+		  log.log(Level.FINE, "UcsBid result is : %d ",ucsBid);
+
 		  return ucsBid;
 		  
 	  }
