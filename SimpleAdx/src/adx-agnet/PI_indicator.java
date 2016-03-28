@@ -113,21 +113,42 @@ public class PI_indicator {
 	}
 	double MinBidValue = 0;
 	
-	static double computeBidUrg(double pop, double reached, double urg)
+	static double computeBidUrg(double pop, double reached,Map<Integer, CampaignData> myCmp,CampaignData cd)
 	{
-		
-		return 0.5;
+		double numOfCmp = 0;
+		double temp = 0;
+		for(MarketSegment ms: cd.getTargetSegment())
+		{
+			numOfCmp = numberOfCampaignsInSegment(ms, myCmp);
+			temp = Math.min(numOfCmp, temp);
+		}
+		return 1/temp;
 	}
-	static double impBidder(CampaignData cd, Map <Integer, CampaignData> market, int day, double ucsTargetLevel)
+	static int numberOfCampaignsInSegment(MarketSegment ms, Map<Integer, CampaignData> myCmp)
+	{
+		int num = 0;
+		for(Map.Entry<Integer, CampaignData> entry: myCmp.entrySet())
+		{
+			for(MarketSegment m: entry.getValue().getTargetSegment())
+			{
+				if(m.equals(ms))
+					num++;
+			}
+		}
+			
+		
+		return num;
+	}
+	static double impBidder(CampaignData cd, Map<Integer, CampaignData> myCmp, Map <Integer, CampaignData> market, int day, double ucsTargetLevel)
 	{
 		double bid = 0.5;//TODO check min bid.
+		
 		double pop = popularitySegmentMultiDays(cd.getTargetSegment(), market, day - 1, day);
 		double reached = cd.getStats().getTargetedImps()/cd.getReachImps();//percentage of completion
-		double urg = urgency(cd, reached, day);
+		
 		double budget = cd.getBudget();
 		
-		
-		double bidUrg = computeBidUrg(pop, reached, urg);
+		double bidUrg = urgency(cd,reached,day) * computeBidUrg(pop, reached, myCmp, cd);
 		
 		
 		if(bidUrg > 0.4)
