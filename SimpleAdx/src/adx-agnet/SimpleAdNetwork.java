@@ -136,6 +136,10 @@ public class SimpleAdNetwork extends Agent {
 	public SimpleAdNetwork() {
 		campaignReports = new LinkedList<CampaignReport>();
 		SetCurrCompetition(new CompetitionData());
+		
+		
+		//change default log level
+		log.setLevel(Level.FINE);
 	}
 
 	@Override
