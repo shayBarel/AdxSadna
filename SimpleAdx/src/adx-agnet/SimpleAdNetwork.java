@@ -335,6 +335,9 @@ public class SimpleAdNetwork extends Agent {
 		if ((pendingCampaign.id == adNetworkDailyNotification.getCampaignId())
 				&& (notificationMessage.getCostMillis() != 0)) {
 
+			
+			//we won the campaign 
+			
 			/* add campaign to list of won campaigns */
 			pendingCampaign.setBudget(notificationMessage.getCostMillis()/1000.0);
 			currCampaign = pendingCampaign;
@@ -344,9 +347,28 @@ public class SimpleAdNetwork extends Agent {
 			
 			campaignAllocatedTo = " WON at cost (Millis)"
 					+ notificationMessage.getCostMillis();
+			
+			log.fine("won campaign " + String.valueOf(adNetworkDailyNotification.getCampaignId()));
+			
+			
+			//updating competition level (lowering the competition)
+			double current_competition_level = AgentData.GetActiveAgentInstance().GetContractBidCompetitionLevel();
+			current_competition_level = current_competition_level  /  GameFactorDefaults.CONTRACT_BIDS_COMPETITION_DEFAULT_FACTOR ;
+			AgentData.GetActiveAgentInstance().SetContractBidCompetitionLevel(current_competition_level);
+			log.fine("updating competition level to " + String.valueOf(current_competition_level));
+	
 		}
 		else
 		{
+			//we haven't won .
+			log.fine("did not win .");
+			
+			//updating competition level 
+			double current_competition_level = AgentData.GetActiveAgentInstance().GetContractBidCompetitionLevel();
+			current_competition_level = current_competition_level * GameFactorDefaults.CONTRACT_BIDS_COMPETITION_DEFAULT_FACTOR ;
+			AgentData.GetActiveAgentInstance().SetContractBidCompetitionLevel(current_competition_level);
+			log.fine("updating competition level to " + String.valueOf(current_competition_level));
+			
 			//add the campaign to other's campaigns .
 			competition.GetOthersCampaigns().put(pendingCampaign.id, pendingCampaign);
 		}
@@ -545,8 +567,6 @@ public class SimpleAdNetwork extends Agent {
 
 	@Override
 	protected void simulationSetup() {
-		
-		Test1();
 		
 		Random random = new Random();
 

@@ -36,6 +36,14 @@ public class AgentData
 	double _QualityRating = 1.0;
 	double _ContractBidCompetitionLevel =  1.0 ;
 	
+	public double GetContractBidCompetitionLevel() {
+		return _ContractBidCompetitionLevel;
+	}
+
+	public void SetContractBidCompetitionLevel(double _ContractBidCompetitionLevel) {
+		this._ContractBidCompetitionLevel = _ContractBidCompetitionLevel;
+	}
+
 	public double GetQualityRating () 
 	{
 		return _QualityRating;

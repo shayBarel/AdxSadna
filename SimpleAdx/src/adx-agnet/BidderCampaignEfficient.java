@@ -45,6 +45,11 @@ public class BidderCampaignEfficient extends BidderCampaign
 		
 		//call price index class, to compute price.
 		double pi = PI_indicator.popularitySegmentMultiDays(segment, market, dayStart, dayEnd);
+		
+		//update according to competition factor .
+		double competition_level = AgentData.GetActiveAgentInstance().GetContractBidCompetitionLevel();
+		pi = pi / competition_level ; //the more competitive the lower the price .
+		
 		return (long) pi;
 	
 	}
