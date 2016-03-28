@@ -7,48 +7,10 @@
  */
 public class AgentData 
 {
-	static double UcsDailylevel[] = new double[100]; // should be initialized with all zero ( at start of the game )
-	static double UcsDailyPrice[] = new double[100]; // same
-	static double reachedImpression;
-
-	public static double getUcsDailylevel(int i) {
-		return UcsDailylevel[i];
-	}
-	
-	
-
-	public static double getReachedImpression() {
-		return reachedImpression;
-	}
-
-
-
-	public static void setReachedImpression(double reachedImpression) {
-		AgentData.reachedImpression = reachedImpression;
-	}
-
-
-
-	public static void setUcsDailylevel(double ucsDailylevel,int i) {
-		UcsDailylevel[i] = ucsDailylevel;
-	}
-
-	public static double getUcsDailyPrice(int i) {
-		return UcsDailyPrice[i];
-	}
-
-	public static void setUcsDailyPrice(double ucsDailyPrice,int i) {
-		UcsDailyPrice[i] = ucsDailyPrice;
-	}
-
-	//Implementation of singleton.
+	//Implementation of singleton (optional).
 	private static AgentData _instance = null ;
 
-	protected AgentData() {
-		//prevent instantiation
-	}
-	
-	public static AgentData GetInstance() 
+	public static AgentData GetActiveAgentInstance() 
 	{
 		if(_instance == null) 
 		{
@@ -59,13 +21,20 @@ public class AgentData
 	
 	//end Implementation of singleton.
 	///////////////////////////////
+
 	
+	//ctor 
+	public AgentData() {}
+		
+		
+		
 	//////////////////////////////
 	/// agent data & capabilities.
 	//////////////////////////////
 
 	
 	double _QualityRating = 1.0;
+	double _ContractBidCompetitionLevel =  1.0 ;
 	
 	public double GetQualityRating () 
 	{

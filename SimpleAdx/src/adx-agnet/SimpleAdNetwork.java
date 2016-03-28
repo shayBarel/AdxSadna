@@ -357,7 +357,7 @@ public class SimpleAdNetwork extends Agent {
 				+ " Quality Score is: " + notificationMessage.getQualityScore());
 		
 		//save quality rating 
-		AgentData.GetInstance().SetQualityRating(notificationMessage.getQualityScore());
+		AgentData.GetActiveAgentInstance().SetQualityRating(notificationMessage.getQualityScore());
 	}
 
 	/**
@@ -412,7 +412,7 @@ public class SimpleAdNetwork extends Agent {
 
 
 
-		    rbid = PI_indicator.impBidder(cmp, allCampaigns, day, ucsTargetLevel);
+		    rbid = PI_indicator.impBidder(cmp, myCampaigns, allCampaigns, day, ucsTargetLevel);
 
 			/*
 			 * add bid entries w.r.t. each active campaign with remaining contracted
@@ -545,6 +545,9 @@ public class SimpleAdNetwork extends Agent {
 
 	@Override
 	protected void simulationSetup() {
+		
+		Test1();
+		
 		Random random = new Random();
 
 		day = 0;
@@ -556,7 +559,7 @@ public class SimpleAdNetwork extends Agent {
 
 		log.fine("AdNet " + getName() + " simulationSetup");
 	}
-
+	
 	@Override
 	protected void simulationFinished() {
 		campaignReports.clear();

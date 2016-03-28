@@ -24,7 +24,7 @@ public class BidderCampaignMinimum extends BidderCampaign {
 	{
 		
 		//get current quality rating of our agent .
-		AgentData myagent = AgentData.GetInstance();
+		AgentData myagent = AgentData.GetActiveAgentInstance();
 		double quality_rating = myagent.GetQualityRating();
 		
 		double reach = campaign.getReachImps() ;
