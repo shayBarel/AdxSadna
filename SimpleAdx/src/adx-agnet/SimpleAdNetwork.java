@@ -379,7 +379,10 @@ public class SimpleAdNetwork extends Agent {
 				+ " Quality Score is: " + notificationMessage.getQualityScore());
 		
 		//save quality rating 
-		AgentData.GetActiveAgentInstance().SetQualityRating(notificationMessage.getQualityScore());
+		double new_qr = notificationMessage.getQualityScore() ;
+		AgentData.GetActiveAgentInstance().SetQualityRating(new_qr);
+		log.fine(String.format("new quality rating: %f", new_qr));
+		
 	}
 
 	/**

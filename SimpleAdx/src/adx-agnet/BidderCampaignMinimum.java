@@ -1,4 +1,5 @@
-import tau.tac.adx.agents.CampaignData;
+import java.util.logging.Logger;
+
 import tau.tac.adx.report.demand.CampaignOpportunityMessage;
 
 /**
@@ -26,6 +27,9 @@ public class BidderCampaignMinimum extends BidderCampaign {
 		//get current quality rating of our agent .
 		AgentData myagent = AgentData.GetActiveAgentInstance();
 		double quality_rating = myagent.GetQualityRating();
+		Logger log = Logger
+				.getLogger(SimpleAdNetwork.class.getName());
+		log.fine(String.format("computing min bid, current quality rating: %f", quality_rating));
 		
 		double reach = campaign.getReachImps() ;
 		

@@ -1,5 +1,6 @@
 
 import java.util.Random;
+import java.util.logging.Logger;
 
 import tau.tac.adx.report.demand.CampaignOpportunityMessage;
 import tau.tac.adx.report.adn.MarketSegment;
@@ -50,9 +51,47 @@ public class BidderCampaignEfficient extends BidderCampaign
 		double competition_level = AgentData.GetActiveAgentInstance().GetContractBidCompetitionLevel();
 		pi = pi / competition_level ; //the more competitive the lower the price .
 		
-		return (long) pi;
+		//fix according to min.max bound 
+		long result_bid = FixBidMinimumMaximumBound(pending_campaign, pi) ;
+		
+		return result_bid ;
 	
 	}
 	
 
+	private long FixBidMinimumMaximumBound(CampaignData pending_campaign, double original_bid)
+	{
+		
+		//lower than minimum  ?
+		BidderCampaignMinimum min_bidder = new BidderCampaignMinimum() ;
+		long min_bid = min_bidder.GetMinimumBid(pending_campaign);
+		if (original_bid < min_bid)
+		{
+			Logger log = Logger
+					.getLogger(SimpleAdNetwork.class.getName());
+			log.fine(String.format("tried to bid lower than minimum on campaign."
+					+ " campaign id: %d, original bid: %f, new bid (minimum):%d", 
+					pending_campaign.id, original_bid, min_bid));
+			return min_bid ;
+		}
+		
+		//higher than maximum ?
+		BidderCampaignMaximum max_bidder = new BidderCampaignMaximum() ;
+		long max_bid = max_bidder.GetMaximumBid(pending_campaign);
+		if (original_bid > max_bid)
+		{
+			Logger log = Logger
+					.getLogger(SimpleAdNetwork.class.getName());
+			log.fine(String.format("tried to bid higher than maximum on campaign."
+					+ " campaign id: %d, original bid: %f, new bid (maximum):%d", 
+					pending_campaign.id, original_bid, max_bid));
+			return max_bid ;
+		}
+		
+		//original bid is between the bounds , 
+		//return it .
+		return (long) original_bid ;
+		
+	}
+	
 }
