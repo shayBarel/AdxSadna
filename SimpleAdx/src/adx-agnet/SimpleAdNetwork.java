@@ -261,11 +261,16 @@ public class SimpleAdNetwork extends Agent {
 		pendingCampaign = new CampaignData(com);
 		System.out.println("Day " + day + ": Campaign opportunity - " + pendingCampaign);
 
-		BidderCampaign campBidder = new BidderCampaignEfficient();
-		//BidderCampaign campBidder = new BidderCampaignMinimum();
+		//BidderCampaign campBidder = new BidderCampaignEfficient();
+		BidderCampaign campBidder = new BidderCampaignMinimum();
 		//BidderCampaign campBidder = new BidderCampaignMaximum();
 		CompetitionData competition = GetCurrCompetition();
 		long cmpBidMillis = campBidder.GenerateCampaignBid(com,competition);
+		
+		//log contract bid 
+		log.fine(String.format("bidded for campaign %d (with reach %d). given bid value : %d ", 
+				pendingCampaign.id, com.getReachImps(), cmpBidMillis ) );
+			
 		//System.out.println("######## i gave: " + cmpBidMillis + ",minimum was:" + cmpBidMillisMinimum);
 		System.out.println("Day " + day + ": Campaign total budget bid (millis): " + cmpBidMillis);
 
@@ -306,6 +311,14 @@ public class SimpleAdNetwork extends Agent {
 			System.out.println("Day " + day + ": Initial ucs bid is " + ucsBid);
 		}
 
+		
+		//temporary fix
+		//when UCS turned out negative or NaN- fixing it to be some constant .
+		if (ucsBid <= 0 || Double.isNaN(ucsBid)) 
+		{
+			ucsBid = GameFactorDefaults.UCS_DEFAULT_LEVEL;
+		}
+		
 		/* Note: Campaign bid is in millis */
 		AdNetBidMessage bids = new AdNetBidMessage(ucsBid, pendingCampaign.id, cmpBidMillis);
 		sendMessage(demandAgentAddress, bids);
