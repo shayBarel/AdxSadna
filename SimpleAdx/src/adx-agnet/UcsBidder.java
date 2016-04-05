@@ -3,6 +3,10 @@
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.math3.*;
+import org.apache.commons.math3.stat.regression.SimpleRegression;
+
+
 
 public class UcsBidder {
 	
@@ -123,6 +127,8 @@ public UcsBidder(UcsHistory ucsHistroy,double ImpressionLeft) {
 		  else {
 			  
 			  log.log(Level.FINE, "UcsBid algo for days follow 20 ( regression ) ");
+
+			  SimpleRegression regression = new SimpleRegression();
 
 			  ucsBid =  Math.random()*4; // to be replaced by regression.
 			  

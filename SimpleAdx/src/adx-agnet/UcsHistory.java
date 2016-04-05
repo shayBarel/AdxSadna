@@ -31,7 +31,6 @@ public class UcsHistory {
 	{
 		AgentUcsData agent = GameStats.get(gameNum);
 		return agent.getUcsDailyPrice(CurrentDay);
-
 	}
 	
 	
