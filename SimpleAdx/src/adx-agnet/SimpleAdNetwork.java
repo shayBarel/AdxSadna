@@ -261,8 +261,8 @@ public class SimpleAdNetwork extends Agent {
 		pendingCampaign = new CampaignData(com);
 		System.out.println("Day " + day + ": Campaign opportunity - " + pendingCampaign);
 
-		//BidderCampaign campBidder = new BidderCampaignEfficient();
-		BidderCampaign campBidder = new BidderCampaignMinimum();
+		BidderCampaign campBidder = new BidderCampaignEfficient();
+		//BidderCampaign campBidder = new BidderCampaignMinimum();
 		//BidderCampaign campBidder = new BidderCampaignMaximum();
 		CompetitionData competition = GetCurrCompetition();
 		long cmpBidMillis = campBidder.GenerateCampaignBid(com,competition);
@@ -469,6 +469,8 @@ public class SimpleAdNetwork extends Agent {
 				for (AdxQuery query : cmp.getCampaignQueries()) 
 				{
 					
+					log.fine(String.format("handle query for bid bundle: %s", query.toString()));
+					
 					if (cmp.impsTogo() - entCount > 0) 
 					{
 						/*
@@ -574,7 +576,7 @@ public class SimpleAdNetwork extends Agent {
 			 //double rnd = Math.random(); 
 			 //if (rnd > 0.95) 
 			// { 	
-				 AdNetworkReportEntry entry = adnetReport .getAdNetworkReportEntry(adnetKey);
+				 AdNetworkReportEntry entry = adnetReport.getAdNetworkReportEntry(adnetKey);
 				 System.out.println(adnetKey + " " + entry); 
 			 //} 
 		 }

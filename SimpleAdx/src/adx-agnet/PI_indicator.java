@@ -81,6 +81,7 @@ public class PI_indicator {
 	
 	static double WeightSegment (Set<MarketSegment> segment)
 	{
+		int segment_size = Population.GetPartitionedSegmentSize(segment) ;
 		return 0.25 ;
 	}
 	
