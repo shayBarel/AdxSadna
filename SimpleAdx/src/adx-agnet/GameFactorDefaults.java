@@ -7,4 +7,8 @@ public class GameFactorDefaults
 	
 	public static final double UCS_DEFAULT_LEVEL = 0.1111;
 	
+	public static final int POPULATION_SIZE = 10000;
+	
+	
+	
 }

@@ -4,6 +4,7 @@ import tau.tac.adx.users.properties.Age;
 import tau.tac.adx.users.properties.Gender;
 import tau.tac.adx.users.properties.Income;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -223,8 +224,8 @@ public class Population
 	//YOUNG,	FEMALE, HIGH
 	//OLD,		FEMALE,	HIGH
 	
-	//targeted segment = segment with triple partition (i.e. FEMALE, 	OLD,	HIGH)
-	static public int GetPartitionedSegmentSize (Set<MarketSegment> seg)
+	//partitioned segment = segment with triple partition (i.e. FEMALE, 	OLD,	HIGH)
+	static public int Get3PartitionedSegmentSize (Set<MarketSegment> seg)
 	{
 		
 		Logger log = Logger
@@ -365,5 +366,423 @@ public class Population
 		
 		return result;
 	}
+	
+	
+	static public int Get2PartitionedSegmentSize (Set<MarketSegment> seg)
+	{
+		
+		int result = 0 ;
+		Logger log = Logger
+				.getLogger(SimpleAdNetwork.class.getName());
+
+		//1 GROUP: NO AGE
+		
+		//MALE, LOW
+		if (seg.contains(MarketSegment.LOW_INCOME) && seg.contains(MarketSegment.MALE))
+		{
+			//YOUNG , MALE, LOW
+			Set<MarketSegment> partition1 = new HashSet<MarketSegment>();
+			partition1.add(MarketSegment.YOUNG) ;
+			partition1.add(MarketSegment.MALE) ;
+			partition1.add(MarketSegment.LOW_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition1);
+
+			//OLD , MALE, LOW
+			Set<MarketSegment> partition2 = new HashSet<MarketSegment>();
+			partition2.add(MarketSegment.OLD) ;
+			partition2.add(MarketSegment.MALE) ;
+			partition2.add(MarketSegment.LOW_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition2);
+		}
+		
+		//FEMALE, LOW
+		else if (seg.contains(MarketSegment.LOW_INCOME) && seg.contains(MarketSegment.FEMALE))
+		{
+			//YOUNG , FEMALE, LOW
+			Set<MarketSegment> partition1 = new HashSet<MarketSegment>();
+			partition1.add(MarketSegment.YOUNG) ;
+			partition1.add(MarketSegment.FEMALE) ;
+			partition1.add(MarketSegment.LOW_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition1);
+
+			//OLD , FEMALE, LOW
+			Set<MarketSegment> partition2 = new HashSet<MarketSegment>();
+			partition2.add(MarketSegment.OLD) ;
+			partition2.add(MarketSegment.FEMALE) ;
+			partition2.add(MarketSegment.LOW_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition2);
+			
+		}
+
+		//MALE, HIGH
+		else if (seg.contains(MarketSegment.HIGH_INCOME) && seg.contains(MarketSegment.MALE))
+		{
+			//YOUNG , MALE, HIGH
+			Set<MarketSegment> partition1 = new HashSet<MarketSegment>();
+			partition1.add(MarketSegment.YOUNG) ;
+			partition1.add(MarketSegment.MALE) ;
+			partition1.add(MarketSegment.HIGH_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition1);
+
+			//OLD , MALE, HIGH
+			Set<MarketSegment> partition2 = new HashSet<MarketSegment>();
+			partition2.add(MarketSegment.OLD) ;
+			partition2.add(MarketSegment.MALE) ;
+			partition2.add(MarketSegment.HIGH_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition2);
+			
+		}
+		
+		//FEMALE, HIGH
+		else if (seg.contains(MarketSegment.HIGH_INCOME) && seg.contains(MarketSegment.FEMALE))
+		{
+			//YOUNG , FEMALE, HIGH
+			Set<MarketSegment> partition1 = new HashSet<MarketSegment>();
+			partition1.add(MarketSegment.YOUNG) ;
+			partition1.add(MarketSegment.FEMALE) ;
+			partition1.add(MarketSegment.HIGH_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition1);
+
+			//OLD , FEMALE, HIGH
+			Set<MarketSegment> partition2 = new HashSet<MarketSegment>();
+			partition2.add(MarketSegment.OLD) ;
+			partition2.add(MarketSegment.FEMALE) ;
+			partition2.add(MarketSegment.HIGH_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition2);
+		}	
+		
+					
+		//2ND GROUP: NO INCOME
+		
+		//YOUNG, MALE
+		else if (seg.contains(MarketSegment.YOUNG) && seg.contains(MarketSegment.MALE))
+		{
+			//YOUNG , MALE, LOW
+			Set<MarketSegment> partition1 = new HashSet<MarketSegment>();
+			partition1.add(MarketSegment.YOUNG) ;
+			partition1.add(MarketSegment.MALE) ;
+			partition1.add(MarketSegment.LOW_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition1);
+
+			//YOUNG , MALE, HIGH
+			Set<MarketSegment> partition2 = new HashSet<MarketSegment>();
+			partition2.add(MarketSegment.YOUNG) ;
+			partition2.add(MarketSegment.MALE) ;
+			partition2.add(MarketSegment.HIGH_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition2);
+		}
+		
+		//OLD, MALE
+		else if (seg.contains(MarketSegment.OLD) && seg.contains(MarketSegment.MALE))
+		{
+			//OLD , MALE, LOW
+			Set<MarketSegment> partition1 = new HashSet<MarketSegment>();
+			partition1.add(MarketSegment.OLD) ;
+			partition1.add(MarketSegment.MALE) ;
+			partition1.add(MarketSegment.LOW_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition1);
+
+			//OLD , MALE, HIGH
+			Set<MarketSegment> partition2 = new HashSet<MarketSegment>();
+			partition2.add(MarketSegment.OLD) ;
+			partition2.add(MarketSegment.MALE) ;
+			partition2.add(MarketSegment.HIGH_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition2);
+		}
+		
+		//YOUNG, FEMALE
+		else if (seg.contains(MarketSegment.YOUNG) && seg.contains(MarketSegment.FEMALE))
+		{
+			//YOUNG , FEMALE, LOW
+			Set<MarketSegment> partition1 = new HashSet<MarketSegment>();
+			partition1.add(MarketSegment.YOUNG) ;
+			partition1.add(MarketSegment.FEMALE) ;
+			partition1.add(MarketSegment.LOW_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition1);
+
+			//YOUNG , FEMALE, HIGH
+			Set<MarketSegment> partition2 = new HashSet<MarketSegment>();
+			partition2.add(MarketSegment.YOUNG) ;
+			partition2.add(MarketSegment.FEMALE) ;
+			partition2.add(MarketSegment.HIGH_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition2);
+		}
+		
+		//OLD, FEMALE
+		else if (seg.contains(MarketSegment.OLD) && seg.contains(MarketSegment.FEMALE))
+		{
+			//OLD , FEMALE, LOW
+			Set<MarketSegment> partition1 = new HashSet<MarketSegment>();
+			partition1.add(MarketSegment.OLD) ;
+			partition1.add(MarketSegment.FEMALE) ;
+			partition1.add(MarketSegment.LOW_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition1);
+
+			//OLD , FEMALE, HIGH
+			Set<MarketSegment> partition2 = new HashSet<MarketSegment>();
+			partition2.add(MarketSegment.OLD) ;
+			partition2.add(MarketSegment.FEMALE) ;
+			partition2.add(MarketSegment.HIGH_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition2);
+		}			
+		
+					
+		//3RD GROUP: NO GENDER
+		
+		//YOUNG, LOW
+		else if (seg.contains(MarketSegment.YOUNG) && seg.contains(MarketSegment.LOW_INCOME))
+		{
+			//YOUNG , MALE, LOW
+			Set<MarketSegment> partition1 = new HashSet<MarketSegment>();
+			partition1.add(MarketSegment.YOUNG) ;
+			partition1.add(MarketSegment.MALE) ;
+			partition1.add(MarketSegment.LOW_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition1);
+
+			//YOUNG , FEMALE, LOW
+			Set<MarketSegment> partition2 = new HashSet<MarketSegment>();
+			partition2.add(MarketSegment.YOUNG) ;
+			partition2.add(MarketSegment.FEMALE) ;
+			partition2.add(MarketSegment.LOW_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition2);
+		}		
+		
+		//OLD, LOW
+		else if (seg.contains(MarketSegment.OLD) && seg.contains(MarketSegment.LOW_INCOME))
+		{
+			//OLD , MALE, LOW
+			Set<MarketSegment> partition1 = new HashSet<MarketSegment>();
+			partition1.add(MarketSegment.OLD) ;
+			partition1.add(MarketSegment.MALE) ;
+			partition1.add(MarketSegment.LOW_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition1);
+
+			//OLD , FEMALE, LOW
+			Set<MarketSegment> partition2 = new HashSet<MarketSegment>();
+			partition2.add(MarketSegment.OLD) ;
+			partition2.add(MarketSegment.FEMALE) ;
+			partition2.add(MarketSegment.LOW_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition2);
+		}	
+		
+		//YOUNG, HIGH
+		else if (seg.contains(MarketSegment.YOUNG) && seg.contains(MarketSegment.HIGH_INCOME))
+		{
+			//YOUNG , MALE, HIGH
+			Set<MarketSegment> partition1 = new HashSet<MarketSegment>();
+			partition1.add(MarketSegment.YOUNG) ;
+			partition1.add(MarketSegment.MALE) ;
+			partition1.add(MarketSegment.HIGH_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition1);
+
+			//YOUNG , FEMALE, HIGH
+			Set<MarketSegment> partition2 = new HashSet<MarketSegment>();
+			partition2.add(MarketSegment.YOUNG) ;
+			partition2.add(MarketSegment.FEMALE) ;
+			partition2.add(MarketSegment.HIGH_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition2);
+		}		
+		
+		//OLD, HIGH
+		else if (seg.contains(MarketSegment.OLD) && seg.contains(MarketSegment.HIGH_INCOME))
+		{
+			//OLD , MALE, HIGH
+			Set<MarketSegment> partition1 = new HashSet<MarketSegment>();
+			partition1.add(MarketSegment.OLD) ;
+			partition1.add(MarketSegment.MALE) ;
+			partition1.add(MarketSegment.HIGH_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition1);
+
+			//OLD , FEMALE, HIGH
+			Set<MarketSegment> partition2 = new HashSet<MarketSegment>();
+			partition2.add(MarketSegment.OLD) ;
+			partition2.add(MarketSegment.FEMALE) ;
+			partition2.add(MarketSegment.HIGH_INCOME) ;
+			result += Get3PartitionedSegmentSize(partition2);
+		}				
+		else 
+		{
+			//error - did not find segment
+			log.severe(String.format("Unknown segment : %s", seg.toString())) ;	
+			return 0;
+		}
+
+
+		//trace log segment size
+		log.fine(String.format("Segment of 2 attributes: %s, size is : %d", seg.toString(), result)) ;
+						
+		
+		return result; 
+	}
+	
+	
+	static public int Get1PartitionedSegmentSize (Set<MarketSegment> seg)
+	{
+		
+		Logger log = Logger
+				.getLogger(SimpleAdNetwork.class.getName());
+
+		int result = 0 ;
+		
+		//LOW INCOME
+		if (seg.contains(MarketSegment.LOW_INCOME))
+		{
+			
+			//LOW, MALE
+			Set<MarketSegment> partition1 = new HashSet<MarketSegment>();
+			partition1.add(MarketSegment.LOW_INCOME) ;
+			partition1.add(MarketSegment.MALE) ;
+			result += Get2PartitionedSegmentSize(partition1);	
+			
+			//LOW, FEMALE
+			Set<MarketSegment> partition2 = new HashSet<MarketSegment>();
+			partition2.add(MarketSegment.LOW_INCOME) ;
+			partition2.add(MarketSegment.FEMALE) ;
+			result += Get2PartitionedSegmentSize(partition2);	
+		}
+	
+		
+		//HIGH INCOME
+		else if (seg.contains(MarketSegment.HIGH_INCOME))
+		{
+			
+			//HIGH, MALE
+			Set<MarketSegment> partition1 = new HashSet<MarketSegment>();
+			partition1.add(MarketSegment.HIGH_INCOME) ;
+			partition1.add(MarketSegment.MALE) ;
+			result += Get2PartitionedSegmentSize(partition1);	
+			
+			//HIGH, FEMALE
+			Set<MarketSegment> partition2 = new HashSet<MarketSegment>();
+			partition2.add(MarketSegment.HIGH_INCOME) ;
+			partition2.add(MarketSegment.FEMALE) ;
+			result += Get2PartitionedSegmentSize(partition2);	
+		}
+		
+		//MALE
+		else if (seg.contains(MarketSegment.MALE))
+		{
+			
+			//HIGH, MALE
+			Set<MarketSegment> partition1 = new HashSet<MarketSegment>();
+			partition1.add(MarketSegment.HIGH_INCOME) ;
+			partition1.add(MarketSegment.MALE) ;
+			result += Get2PartitionedSegmentSize(partition1);	
+			
+			//LOW, MALE
+			Set<MarketSegment> partition2 = new HashSet<MarketSegment>();
+			partition2.add(MarketSegment.LOW_INCOME) ;
+			partition2.add(MarketSegment.MALE) ;
+			result += Get2PartitionedSegmentSize(partition2);	
+		}		
+		
+		//FEMALE
+		else if (seg.contains(MarketSegment.FEMALE))
+		{
+			
+			//HIGH, FEMALE
+			Set<MarketSegment> partition1 = new HashSet<MarketSegment>();
+			partition1.add(MarketSegment.HIGH_INCOME) ;
+			partition1.add(MarketSegment.FEMALE) ;
+			result += Get2PartitionedSegmentSize(partition1);	
+			
+			//LOW, FEMALE
+			Set<MarketSegment> partition2 = new HashSet<MarketSegment>();
+			partition2.add(MarketSegment.LOW_INCOME) ;
+			partition2.add(MarketSegment.FEMALE) ;
+			result += Get2PartitionedSegmentSize(partition2);	
+		}		
+	
+		//YOUNG
+		else if (seg.contains(MarketSegment.YOUNG))
+		{
+			
+			//YOUNG, MALE
+			Set<MarketSegment> partition1 = new HashSet<MarketSegment>();
+			partition1.add(MarketSegment.YOUNG) ;
+			partition1.add(MarketSegment.MALE) ;
+			result += Get2PartitionedSegmentSize(partition1);	
+			
+			//YOUNG, FEMALE
+			Set<MarketSegment> partition2 = new HashSet<MarketSegment>();
+			partition2.add(MarketSegment.YOUNG) ;
+			partition2.add(MarketSegment.FEMALE) ;
+			result += Get2PartitionedSegmentSize(partition2);	
+		}			
+
+		//OLD
+		else if (seg.contains(MarketSegment.OLD))
+		{
+			
+			//OLD, MALE
+			Set<MarketSegment> partition1 = new HashSet<MarketSegment>();
+			partition1.add(MarketSegment.OLD) ;
+			partition1.add(MarketSegment.MALE) ;
+			result += Get2PartitionedSegmentSize(partition1);	
+			
+			//OLD, FEMALE
+			Set<MarketSegment> partition2 = new HashSet<MarketSegment>();
+			partition2.add(MarketSegment.OLD) ;
+			partition2.add(MarketSegment.FEMALE) ;
+			result += Get2PartitionedSegmentSize(partition2);	
+		}
+		else 
+		{
+			//error - did not find segment
+			log.severe(String.format("Unknown segment : %s", seg.toString())) ;	
+			return 0;
+		}
+
+
+		//trace log segment size
+		log.fine(String.format("Segment of 1 attributes: %s, size is : %d", seg.toString(), result)) ;
+						
+		
+		return result ;
+		
+	}
+	
+	
+	//get size of segment (it may be partitioned) 
+	static public int GetSegmentSize (Set<MarketSegment> seg)
+	{
+		
+		Logger log = Logger
+				.getLogger(SimpleAdNetwork.class.getName());
+
+		int result = 0 ;
+		
+		//segment of 1 attribute (i.e. "female" )
+		if (seg.size() == 1)
+		{
+			result = Get1PartitionedSegmentSize(seg);	
+		}
+		
+		//segment of 2 attributes (i.e. "young, high" )
+		else if (seg.size() == 2)
+		{
+			result = Get2PartitionedSegmentSize(seg);
+		}
+
+		//segment of 3 attributes (i.e. "young, female, high" )
+		else if (seg.size() == 3)
+		{
+			result = Get3PartitionedSegmentSize(seg);
+			
+		}
+		else
+		{
+			//error
+			log.severe(String.format("could not get segment population size. segment attributes length is unsupported."
+					+ "segment: %s, number of attributes %d:", seg.toString(), seg.size()));
+		}
+	
+		log.fine(String.format("calculated size of segment: %s size: %d.",
+				seg.toString(), result ));
+	
+		
+		return result ;
+	}
+	
 	
 }

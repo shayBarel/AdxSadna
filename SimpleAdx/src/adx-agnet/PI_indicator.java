@@ -1,5 +1,6 @@
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import tau.tac.adx.report.adn.MarketSegment;
 
@@ -81,8 +82,22 @@ public class PI_indicator {
 	
 	static double WeightSegment (Set<MarketSegment> segment)
 	{
-		int segment_size = Population.GetPartitionedSegmentSize(segment) ;
-		return 0.25 ;
+		
+		Logger log = Logger
+				.getLogger(SimpleAdNetwork.class.getName());
+
+		
+		//get the size of segment (number of users) 
+		int segment_size = Population.GetSegmentSize(segment) ;
+				
+		//divide by size of whole population to get "probability".
+		double result = ((double) segment_size)/((double) GameFactorDefaults.POPULATION_SIZE);
+		
+		log.fine(String.format("price index : computed size of segment : %s, size is: %d"
+				+ ", probability in population: %f",
+				segment.toString(), segment_size, result)); 
+		
+		return result ;
 	}
 	
 //	/**
