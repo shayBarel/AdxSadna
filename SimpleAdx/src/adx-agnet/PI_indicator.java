@@ -5,40 +5,69 @@ import java.util.logging.Logger;
 import tau.tac.adx.report.adn.MarketSegment;
 
 
-public class PI_indicator {
-	//getting MarketSegment, and set of campaignData.
-	//return double - the MarketSegment popularity.
+public class PI_indicator 
+{
 	
-	//segment is a combination of 3 attributes i.e. <young, high, male>...
-	//or combinations of 2 or 1 attributes.
-	//the combination is given as a Set .
-	public static double popularityOfSegment(Set<MarketSegment> segment, Map <Integer, CampaignData> market, int day)
+	
+	/**
+	 * compute the popularity of a given segment in a given day.
+	 * the segment must be a partitioned segment (one that has 3 attributes. ) 
+	 * @param segment
+	 * @param market - a collection of active campaigns that represent the market .
+	 * @param day
+	 * @return
+	 */
+
+	static private double popularityOfSegment(Set<MarketSegment> segment, Map <Integer, CampaignData> market, int day)
 	{
 		
+		Logger log = Logger
+				.getLogger(SimpleAdNetwork.class.getName());
+		
+	
 		//init. sum
 		double pop = 0;
 
-		for(Map.Entry<Integer, CampaignData> entery : market.entrySet())
+		//validate segment is 3-partitioned .
+		if (segment.size() != 3 )
 		{
-			CampaignData cd = entery.getValue();
+			log.severe(String.format("tried to compute size of exact segment while segment is not exact. size of segment : %d", 
+					segment.size()));
+		}
+		
+		log.fine(String.format("computing segment popularity for campaign %d,"
+				+ " segment: %s, during day: %d", 0, segment, day));
 
-			//if market campaign is for the segment we want,
-			//(exact match), then include it in calculation
-			//(compare 2 sets of segments)
-			//TODO is not precise, possible partial overlap of segments.
-			Set<MarketSegment> marketCampaignSegments = cd.getTargetSegment();
-			if (marketCampaignSegments.equals(segment))
+			
+		//iterate all campaigns in market
+		for(Map.Entry<Integer, CampaignData> entry : market.entrySet())
+		{
+			CampaignData marketCampaign = entry.getValue();
+
+			//get partition of the market campaign, 
+			//and see if our segment is contained .
+			Set<MarketSegment> marketCampaignSegment = marketCampaign.getTargetSegment();
+			Set<Set<MarketSegment>> marketCampaignSegmentPartitioned = 
+					Population.GetPartitionedSegments(marketCampaignSegment) ;
+			
+			
+			//if market campaign contains the segment we want,
+			//and also overlaps in our days, 
+			//then we add to the "popularity" of segment . 
+			if (marketCampaignSegmentPartitioned.contains(segment)
+					&& day <= marketCampaign.getDayEnd() && day >= marketCampaign.getDayStart())
 			{
-
-				if(day <= cd.getDayEnd() && day >= cd.getDayStart())
-				{
-					double segmentSize = WeightSegment(marketCampaignSegments);
-					long reach = cd.getReachImps();
-					long days = (cd.getDayEnd() - cd.getDayStart()) + 1;
-					
-					pop += ((double)reach) / (segmentSize * ((double)days));
-				}
 				
+					log.fine(String.format("while computing segment popularity for campaign %d,"
+							+ " segment: %s", 0, segment));
+					
+					log.fine(String.format("intersects with market campaign %d, of segment: %s",
+							marketCampaign.id, marketCampaignSegment));
+				
+					long reach = marketCampaign.getReachImps();
+					double segmentSize = WeightSegment(marketCampaignSegment);
+					long days = (marketCampaign.getDayEnd() - marketCampaign.getDayStart()) + 1;
+					pop += ((double)reach) / (segmentSize * ((double)days));			
 			}
 		}
 		
@@ -46,10 +75,12 @@ public class PI_indicator {
 	}
 	
 	/**
-	 * calculate the popularity of a segment, 
-	 * during a group of days .
-	 * @param segment
-	 * @param market
+	 * calculate the popularity of a segment,  during a group of days .
+	 * the segment may have any number of attributes 
+	 * (be i.e. "male", "female, old",  or "female, old, high income" )
+	 * uses the subroutine that computed popularity for a small segment.  
+	 * @param segment 
+	 * @param market - a collection of active campaigns that represent the market .
 	 * @param dayStart
 	 * @param dayEnd
 	 * @return
@@ -59,23 +90,48 @@ public class PI_indicator {
 				int dayStart, int dayEnd)
 	{
 		
+		Logger log = Logger
+				.getLogger(SimpleAdNetwork.class.getName());
+		
+		
 		double sum_popularity = 0 ;
 
-		//for the segment, loop on all days .
-		for (int i=dayStart; i<=dayEnd; i++)
+		log.fine(String.format("computing segment popularity for campaign %d,"
+				+ " of segment: %s, during days: %d to %d", 
+				0, segment, dayStart, dayEnd));
+
+		
+		//first, partition segment into 3-partition
+		Set<Set<MarketSegment>> partition = Population.GetPartitionedSegments(segment) ;
+
+		//for each small segment, find its popularity over all days .
+		for (Set<MarketSegment> sub_segment : partition) 
 		{
-			if (popularityOfSegment(segment, market, i) > 0)
+			
+		
+			//for the segment, loop on all days .
+			for (int i=dayStart; i<=dayEnd; i++)
 			{
-				//add to the sum, the popularity of that segment in that day.
-				sum_popularity += popularityOfSegment(segment, market, i);
+				double sub_segment_popularity = popularityOfSegment(sub_segment, market, i);
+				if (sub_segment_popularity > 0)
+				{
+					//add to the sum, the popularity of that segment in that day.
+					//weighted by the size of sub segment .
+					sum_popularity += Population.Get3PartitionedSegmentSize(sub_segment)
+							 * sub_segment_popularity;
+				}
 			}
 		}
-		
 		
 		//finished iterating. 
 		//now divide the sum by the "weights". (size of days)
 		int numdays = (dayEnd - dayStart) + 1;
-		double result = sum_popularity / (double)(numdays);
+		double result = sum_popularity / 
+				( ((double)Population.GetSegmentSize(segment)) * ((double)numdays));
+		
+		//print result
+		log.fine(String.format("popularity is:  %f", result));
+	
 		return result ;
 	}
 	
