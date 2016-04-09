@@ -187,8 +187,9 @@ public class SimpleAdNetwork extends Agent {
 		// ingoring - this message is obsolete
 	}
 
-	private void handleBankStatus(BankStatus content) {
-		System.out.println("Day " + day + " :" + content.toString());
+	private void handleBankStatus(BankStatus content) 
+	{
+		log.fine("bank status: Day " + day + " :" + content.toString());
 	}
 
 	/**
