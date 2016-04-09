@@ -1,3 +1,4 @@
+import java.util.logging.Logger;
 
 /** 
  * a "global" class that contains all data about our agent .
@@ -17,6 +18,18 @@ public class AgentData
 			_instance = new AgentData();
 		}
 		return _instance;
+	}
+	
+	/**
+	 * reset the instance (is called between simulations).
+	 */
+	public static void ResetAgent ()
+	{
+		_instance = null; 
+		
+		Logger log = Logger
+				.getLogger(SimpleAdNetwork.class.getName());
+		log.fine("agent data instance was reset .");
 	}
 	
 	//end Implementation of singleton.

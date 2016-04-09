@@ -361,7 +361,7 @@ public class Population
 
 
 		//trace log segment size
-		log.fine(String.format("Segment : %s size is : %d", seg.toString(), result)) ;
+		log.finer(String.format("Segment : %s size is : %d", seg.toString(), result)) ;
 		
 		return result;
 	}
@@ -392,7 +392,7 @@ public class Population
 			result += Get3PartitionedSegmentSize(sub_segment) ;
 		}
 
-		log.fine(String.format("calculated size of segment: %s size: %d.",
+		log.finer(String.format("calculated size of segment: %s size: %d.",
 				seg.toString(), result ));
 	
 		
@@ -651,10 +651,9 @@ public class Population
 
 
 		//trace log segment size
-		log.fine(String.format("Partitioned segment of 2 attributes: %s, "
-				+" to partitioned segments: %s", seg.toString(), result.toString())) ;
-						
-		
+//		log.fine(String.format("Partitioned segment of 2 attributes: %s, "
+//				+" to partitioned segments: %s", seg.toString(), result.toString())) ;
+
 		
 		return result ;
 	}
@@ -790,8 +789,8 @@ public class Population
 
 
 		//trace log segment size
-		log.fine(String.format("Partitioned segment of 1 attribute: %s, "
-				+" to partitioned segments: %s", seg.toString(), result.toString())) ;
+//		log.fine(String.format("Partitioned segment of 1 attribute: %s, "
+//				+" to partitioned segments: %s", seg.toString(), result.toString())) ;
 						
 	
 		return result ;
@@ -849,7 +848,7 @@ public class Population
 					, seg.toString(), seg.size()));
 		}
 	
-		log.fine(String.format("partitioned segment: %s result partition: %s.",
+		log.finer(String.format("partitioned segment: %s result partition: %s.",
 				seg.toString(), result.toString() ));
 	
 		

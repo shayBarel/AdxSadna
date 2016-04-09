@@ -94,7 +94,6 @@ public class SimpleAdNetwork extends Agent {
 	private CampaignData pendingCampaign;
 
 	
-
 	//class that saves data about the current competition.
 	private CompetitionData _CurrentCompetition;
 	
@@ -127,16 +126,16 @@ public class SimpleAdNetwork extends Agent {
 	/*
 	 * current day of simulation
 	 */
+	private int day;
+
+	//list of publishers.
+	private String[] publisherNames;
 
 	
-	private int day;
-	private String[] publisherNames;
-	private CampaignData currCampaign;
-
-	public SimpleAdNetwork() {
+	public SimpleAdNetwork() 
+	{
 		campaignReports = new LinkedList<CampaignReport>();
-		SetCurrCompetition(new CompetitionData());
-		
+
 		
 		//change default log level
 		log.setLevel(Level.FINE);
@@ -233,8 +232,7 @@ public class SimpleAdNetwork extends Agent {
 
 		CampaignData campaignData = new CampaignData(initialCampaignMessage);
 		campaignData.setBudget(initialCampaignMessage.getBudgetMillis()/1000.0);
-		currCampaign = campaignData;
-		genCampaignQueries(currCampaign);
+		genCampaignQueries(campaignData);
 
 		/*
 		 * The initial campaign is already allocated to our agent so we add it
@@ -261,6 +259,14 @@ public class SimpleAdNetwork extends Agent {
 		pendingCampaign = new CampaignData(com);
 		System.out.println("Day " + day + ": Campaign opportunity - " + pendingCampaign);
 
+		
+		log.fine(String.format("computing bid for campaign %d (days: %d to %d,"
+				+ " segment: %s, reach: %d).", 
+				pendingCampaign.id, pendingCampaign.getDayStart() , 
+				pendingCampaign.getDayEnd(), pendingCampaign.getTargetSegment(), 
+				pendingCampaign.getReachImps() ) );
+		
+		
 		BidderCampaign campBidder = new BidderCampaignEfficient();
 		//BidderCampaign campBidder = new BidderCampaignMinimum();
 		//BidderCampaign campBidder = new BidderCampaignMaximum();
@@ -268,10 +274,15 @@ public class SimpleAdNetwork extends Agent {
 		long cmpBidMillis = campBidder.GenerateCampaignBid(com,competition);
 		
 		//log contract bid 
-		log.fine(String.format("bidded for campaign %d (with reach %d). given bid value : %d ", 
-				pendingCampaign.id, com.getReachImps(), cmpBidMillis ) );
-			
-		//System.out.println("######## i gave: " + cmpBidMillis + ",minimum was:" + cmpBidMillisMinimum);
+		log.fine(String.format("bidding for campaign %d (days: %d to %d,"
+				+ " segment: %s, reach: %d).", 
+				pendingCampaign.id, pendingCampaign.getDayStart() , 
+				pendingCampaign.getDayEnd(), pendingCampaign.getTargetSegment(), 
+				pendingCampaign.getReachImps() ) );
+		
+		log.fine(String.format("given bid value : %d .", cmpBidMillis ) );
+				
+		
 		System.out.println("Day " + day + ": Campaign total budget bid (millis): " + cmpBidMillis);
 
 		/*
@@ -353,8 +364,7 @@ public class SimpleAdNetwork extends Agent {
 			
 			/* add campaign to list of won campaigns */
 			pendingCampaign.setBudget(notificationMessage.getCostMillis()/1000.0);
-			currCampaign = pendingCampaign;
-			genCampaignQueries(currCampaign);
+			genCampaignQueries(pendingCampaign);
 			
 			competition.GetMyCampaigns().put(pendingCampaign.id, pendingCampaign);
 			
@@ -568,16 +578,18 @@ public class SimpleAdNetwork extends Agent {
 	 * 
 	 * @param AdNetworkReport
 	 */
-	private void handleAdNetworkReport(AdNetworkReport adnetReport) {
+	private void handleAdNetworkReport(AdNetworkReport adnetReport) 
+	{
 
-		System.out.println("Day " + day + " : AdNetworkReport");
+		log.fine("Day " + day + " : AdNetworkReport");
 		
-		 for (AdNetworkKey adnetKey : adnetReport.keys()) {
+		 for (AdNetworkKey adnetKey : adnetReport.keys()) 
+		 {
 			 //double rnd = Math.random(); 
 			 //if (rnd > 0.95) 
 			// { 	
 				 AdNetworkReportEntry entry = adnetReport.getAdNetworkReportEntry(adnetKey);
-				 System.out.println(adnetKey + " " + entry); 
+				 log.fine(adnetKey + " " + entry); 
 			 //} 
 		 }
 		
@@ -591,6 +603,12 @@ public class SimpleAdNetwork extends Agent {
 		day = 0;
 		bidBundle = new AdxBidBundle();
 
+		//reset competition data .
+		SetCurrCompetition(new CompetitionData());
+		
+		//reset agent data .
+		AgentData.ResetAgent();
+		
 		/* initial bid between 0.1 and 0.2 */
 		ucsBid = 0.1 + random.nextDouble()/10.0;
 

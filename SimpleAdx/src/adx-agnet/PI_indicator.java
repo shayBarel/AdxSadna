@@ -18,7 +18,9 @@ public class PI_indicator
 	 * @return
 	 */
 
-	static private double popularityOfSegment(Set<MarketSegment> segment, Map <Integer, CampaignData> market, int day)
+	static private double popularityOfSegment(CampaignData campaign, 
+			Set<MarketSegment> segment, 
+			Map <Integer, CampaignData> market, int day)
 	{
 		
 		Logger log = Logger
@@ -35,8 +37,8 @@ public class PI_indicator
 					segment.size()));
 		}
 		
-		log.fine(String.format("computing segment popularity for campaign %d,"
-				+ " segment: %s, during day: %d", 0, segment, day));
+		log.finer(String.format("computing segment popularity for campaign %d,"
+				+ " segment: %s, during day: %d", campaign.id, segment, day));
 
 			
 		//iterate all campaigns in market
@@ -59,7 +61,7 @@ public class PI_indicator
 			{
 				
 					log.fine(String.format("while computing segment popularity for campaign %d,"
-							+ " segment: %s", 0, segment));
+							+ " segment: %s", campaign.id, segment));
 					
 					log.fine(String.format("intersects with market campaign %d, of segment: %s",
 							marketCampaign.id, marketCampaignSegment));
@@ -86,8 +88,8 @@ public class PI_indicator
 	 * @return
 	 */
 	public static double popularitySegmentMultiDays
-		(Set<MarketSegment> segment, Map <Integer, CampaignData> market, 
-				int dayStart, int dayEnd)
+		(CampaignData campaign, Set<MarketSegment> segment, 
+				Map <Integer, CampaignData> market, int dayStart, int dayEnd)
 	{
 		
 		Logger log = Logger
@@ -98,7 +100,7 @@ public class PI_indicator
 
 		log.fine(String.format("computing segment popularity for campaign %d,"
 				+ " of segment: %s, during days: %d to %d", 
-				0, segment, dayStart, dayEnd));
+				campaign.id, segment, dayStart, dayEnd));
 
 		
 		//first, partition segment into 3-partition
@@ -112,7 +114,8 @@ public class PI_indicator
 			//for the segment, loop on all days .
 			for (int i=dayStart; i<=dayEnd; i++)
 			{
-				double sub_segment_popularity = popularityOfSegment(sub_segment, market, i);
+				double sub_segment_popularity = popularityOfSegment(
+						campaign, sub_segment, market, i);
 				if (sub_segment_popularity > 0)
 				{
 					//add to the sum, the popularity of that segment in that day.
@@ -130,7 +133,10 @@ public class PI_indicator
 				( (WeightSegment(segment)) * ((double)numdays));
 		
 		//print result
-		log.fine(String.format("popularity is:  %f", result));
+		log.fine(String.format("computing segment popularity for campaign %d,"
+				+ " of segment: %s, during days: %d to %d. popularity is: %f", 
+				campaign.id, segment, dayStart, dayEnd, result));
+
 	
 		return result ;
 	}
@@ -149,7 +155,7 @@ public class PI_indicator
 		//divide by size of whole population to get "probability".
 		double result = ((double) segment_size)/((double) GameFactorDefaults.POPULATION_SIZE);
 		
-		log.fine(String.format("price index : computed size of segment : %s, size is: %d"
+		log.finer(String.format("price index : computed size of segment : %s, size is: %d"
 				+ ", probability in population: %f",
 				segment.toString(), segment_size, result)); 
 		
@@ -211,11 +217,12 @@ public class PI_indicator
 		
 		return num;
 	}
+	
 	static double impBidder(CampaignData cd, Map<Integer, CampaignData> myCmp, Map <Integer, CampaignData> market, int day, double ucsTargetLevel)
 	{
 		double bid = 0.5;//TODO check min bid.
 		
-		double pop = popularitySegmentMultiDays(cd.getTargetSegment(), market, day - 1, day);
+		double pop = popularitySegmentMultiDays(cd, cd.getTargetSegment(), market, day - 1, day);
 		double reached = cd.getStats().getTargetedImps()/cd.getReachImps();//percentage of completion
 		
 		double budget = cd.getBudget();
