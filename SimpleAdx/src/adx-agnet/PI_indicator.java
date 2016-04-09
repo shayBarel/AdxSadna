@@ -117,7 +117,7 @@ public class PI_indicator
 				{
 					//add to the sum, the popularity of that segment in that day.
 					//weighted by the size of sub segment .
-					sum_popularity += Population.Get3PartitionedSegmentSize(sub_segment)
+					sum_popularity += WeightSegment(sub_segment)
 							 * sub_segment_popularity;
 				}
 			}
@@ -127,7 +127,7 @@ public class PI_indicator
 		//now divide the sum by the "weights". (size of days)
 		int numdays = (dayEnd - dayStart) + 1;
 		double result = sum_popularity / 
-				( ((double)Population.GetSegmentSize(segment)) * ((double)numdays));
+				( (WeightSegment(segment)) * ((double)numdays));
 		
 		//print result
 		log.fine(String.format("popularity is:  %f", result));
