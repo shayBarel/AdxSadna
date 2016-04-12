@@ -1,4 +1,5 @@
 import java.util.Set;
+import java.util.logging.Logger;
 
 import tau.tac.adx.demand.CampaignStats;
 import tau.tac.adx.props.AdxQuery;
@@ -16,6 +17,8 @@ import tau.tac.adx.report.demand.InitialCampaignMessage;
  */
 
 public class CampaignData {
+
+	
 	/* campaign attributes as set by server */
 	Long reachImps;
 	long dayStart;
@@ -61,6 +64,8 @@ public class CampaignData {
 		videoCoef = com.getVideoCoef();
 		stats = new CampaignStats(0, 0, 0);
 		budget = 0.0;
+		_completionPercent = 0.0 ;
+		_remainingBudgetMillis = 0.0;
 	}
 
 	@Override
@@ -72,10 +77,6 @@ public class CampaignData {
 
 	int impsTogo() {
 		return (int) Math.max(0, reachImps - stats.getTargetedImps());
-	}
-
-	void setStats(CampaignStats s) {
-		stats.setValues(s);
 	}
 
 	public AdxQuery[] getCampaignQueries() {
@@ -121,5 +122,51 @@ public class CampaignData {
 	public CampaignStats getStats() {
 		return stats;
 	}
+
+
+	void setStats(CampaignStats s) {
+		stats.setValues(s);
+	}
+
+	
+	//////////////////////
+	//fields for our usage
+	//////////////////////
+	
+	//the total remaining budget . (i.e. 9500) 
+	protected double _remainingBudgetMillis = 0.0 ;		
+
+	//the percentage of completion of campaign .
+	//(legal values will be between 0.0 and about 1.5)
+	protected double _completionPercent = 0.0 ;
+
+	
+	public double get_remainingBudgetMillis() {
+		return _remainingBudgetMillis;
+	}
+
+	public void set_remainingBudgetMillis(double _remainingBudgetMillis) {
+		this._remainingBudgetMillis = _remainingBudgetMillis;
+	}
+
+	public double get_completionPrecent() {
+		return _completionPercent;
+	}
+
+	public void set_completionPrecent(double _completionPrecent) {
+		this._completionPercent = _completionPrecent;
+	}
+
+
+	public void UpdateFromStats (CampaignStats stats)
+	{
+			
+		//reduce remaining budget 
+		double prevBedget = get_remainingBudgetMillis() ; 
+		double newBudget = prevBedget - stats.getCost() ;
+		set_remainingBudgetMillis(newBudget);
+		
+	}
+	
 	
 }

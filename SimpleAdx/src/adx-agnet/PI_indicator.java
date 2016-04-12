@@ -162,22 +162,6 @@ public class PI_indicator
 		return result ;
 	}
 	
-//	/**
-//	 * return a weight of a group of segments .
-//	 * @param segments
-//	 * @return
-//	 */
-//	static double WeightGroupSegments (Set<MarketSegment> segments)
-//	{
-//		double sum_weight = 0 ;
-//		
-//		//just iterate on segments, and sum their weights.
-//		for (MarketSegment s: segments)
-//		{
-//			sum_weight += WeightSegment(s);
-//		}
-//		return sum_weight;
-//	}
 	
 	public static double urgency(CampaignData cd, double reached, int day)
 	{

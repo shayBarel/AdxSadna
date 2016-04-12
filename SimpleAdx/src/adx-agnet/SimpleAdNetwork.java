@@ -232,9 +232,15 @@ public class SimpleAdNetwork extends Agent {
 		adxAgentAddress = campaignMessage.getAdxAgentAddress();
 
 		CampaignData campaignData = new CampaignData(initialCampaignMessage);
-		campaignData.setBudget(initialCampaignMessage.getBudgetMillis()/1000.0);
+		double newBudget = initialCampaignMessage.getBudgetMillis()/1000.0 ;
+		campaignData.setBudget(newBudget);
+		campaignData.set_remainingBudgetMillis(newBudget);
 		genCampaignQueries(campaignData);
 
+		log.fine(String.format("Initial campaign: %d. campaign budget is: %f", 
+				campaignData.id, newBudget));
+		
+		
 		/*
 		 * The initial campaign is already allocated to our agent so we add it
 		 * to our allocated-campaigns list.
@@ -363,16 +369,19 @@ public class SimpleAdNetwork extends Agent {
 			
 			//we won the campaign 
 			
-			/* add campaign to list of won campaigns */
-			pendingCampaign.setBudget(notificationMessage.getCostMillis()/1000.0);
+			//update campaign data according to received budget
+			double newBudget = notificationMessage.getCostMillis()/1000.0 ;
+			pendingCampaign.setBudget(newBudget);
+			pendingCampaign.set_remainingBudgetMillis(newBudget);
 			genCampaignQueries(pendingCampaign);
 			
+			//put campaign in list of won campaigns
 			competition.GetMyCampaigns().put(pendingCampaign.id, pendingCampaign);
 			
-			campaignAllocatedTo = " WON at cost (Millis)"
-					+ notificationMessage.getCostMillis();
 			
-			log.fine("won campaign " + String.valueOf(adNetworkDailyNotification.getCampaignId()));
+			log.fine(String.format("WON campaign %d at cost (Millis): %d. campaign budget is: %f", 
+					adNetworkDailyNotification.getCampaignId(), notificationMessage.getCostMillis(),
+					pendingCampaign.get_remainingBudgetMillis()));
 			
 			
 			//updating competition level (lowering the competition)
@@ -441,11 +450,9 @@ public class SimpleAdNetwork extends Agent {
 		 * Note: bidding per 1000 imps (CPM) - no more than average budget
 		 * revenue per imp
 		 */
-
-		//double rbid = 10.0*random.nextDouble();
+		//default - random bid
+		double rbid = 10.0*random.nextDouble();
 		
-		//make a bid that is maximum, regardless of profits.
-		double rbid = 10.0;
 
 		//loop through all campaigns
 		CompetitionData competition = GetCurrCompetition();
@@ -460,8 +467,6 @@ public class SimpleAdNetwork extends Agent {
 		    
 
 
-
-		    rbid = PI_indicator.impBidder(cmp, myCampaigns, allCampaigns, day, ucsTargetLevel);
 
 			/*
 			 * add bid entries w.r.t. each active campaign with remaining contracted
@@ -482,6 +487,17 @@ public class SimpleAdNetwork extends Agent {
 					
 					log.fine(String.format("handle query for bid bundle: %s", query.toString()));
 					
+					
+
+				    //rbid = PI_indicator.impBidder(cmp, myCampaigns, allCampaigns, day, ucsTargetLevel);
+					BidderImpressions bidder = new BidderImpressions() ;
+					rbid = bidder.GenerateImpressionBid(cmp, query);
+					log.fine(String.format("generated impression bid for query %s, and campaign %d. "
+							+" bid: %f",
+							query.toString(), cmp.id, rbid));
+					
+					
+					//TODO this seems strange . should remove this check .
 					if (cmp.impsTogo() - entCount > 0) 
 					{
 						/*
@@ -550,16 +566,28 @@ public class SimpleAdNetwork extends Agent {
 		for (CampaignReportKey campaignKey : campaignReport.keys()) 
 		{
 			int cmpId = campaignKey.getCampaignId();
+			
+			//get campaign statistics
 			CampaignStats cstats = campaignReport.getCampaignReportEntry(
 					campaignKey).getCampaignStats();
 			
-			competition.GetMyCampaigns().get(cmpId).setStats(cstats);
+			//find campaign in our collection, and update its statistics .
+			CampaignData campaign = competition.GetMyCampaigns().get(cmpId);
+			campaign.setStats(cstats);
+			
+			//update campaign based on statistics .
+			campaign.UpdateFromStats(cstats);
 			
 			
-			System.out.println("Day " + day + ": Updating campaign " + cmpId + " stats: "
+			log.fine("Day " + day + ": Updating campaign " + cmpId + " stats: "
 					+ cstats.getTargetedImps() + " tgtImps "
 					+ cstats.getOtherImps() + " nonTgtImps. Cost of imps is "
 					+ cstats.getCost());
+			
+
+			log.fine(String.format("campaign %d: remaining budget was updated to %f", 
+					cmpId, campaign.get_remainingBudgetMillis()));
+		
 		}
 	}
 
