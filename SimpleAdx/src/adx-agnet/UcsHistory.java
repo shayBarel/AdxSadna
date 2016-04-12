@@ -5,33 +5,36 @@ import java.util.Map;
 public class UcsHistory {
 
 	
-	int MAX_NUMBER_OF_AGENTS = 100;
+	int MAX_NUMBER_OF_DAYS = 1000;
 	
 	// this is only dummy for checking this is working well . the game number and it's data
-	Map<Integer,AgentUcsData> GameStats; 
+	Map<Integer,UcsDailyReport> GameStats; 
 	
 	UcsHistory(){
 		
 		GameStats = new HashMap<>();
 		
-		for (int i=0 ; i<=MAX_NUMBER_OF_AGENTS; i++)
+		//Initialize map for safety resons.
+		
+		for (int i=0 ; i<=MAX_NUMBER_OF_DAYS; i++)
 		{
-			GameStats.put(i, new AgentUcsData());
+			GameStats.put(i, new UcsDailyReport(0,0,0,0));
 		}
 		
 	}
 	
-	public double getUcsDailylevel(int CurrentDay,int gameNum)
+	
+	public UcsDailyReport getUcsDaily(int day)
 	{
-		AgentUcsData agent = GameStats.get(gameNum);
-		return agent.getUcsDailylevel(CurrentDay);
+		return GameStats.get(day);
 	}
 	
-	public double getUcsDailyPrice(int CurrentDay,int gameNum)
+	public void setUcsDaily(int day ,double level,double price,double target,double bid)
 	{
-		AgentUcsData agent = GameStats.get(gameNum);
-		return agent.getUcsDailyPrice(CurrentDay);
+		UcsDailyReport udp = new UcsDailyReport(level,price,target,bid);
+		
+		GameStats.put(day, udp);
+		
 	}
-	
 	
 }

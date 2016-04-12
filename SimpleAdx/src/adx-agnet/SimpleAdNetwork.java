@@ -300,18 +300,26 @@ public class SimpleAdNetwork extends Agent {
 		UcsBidder ucsBidder;
 		UcsHistory ucsHistory = new UcsHistory();
 		// dummy code to be deleted ;
-		AgentUcsData TempAgentData = new AgentUcsData();
+		//AgentUcsData TempAgentData = new AgentUcsData();
 		for (int i =0 ; i<=20;i++)
 		{
-			TempAgentData.setUcsDailylevel(day,i);
-			TempAgentData.setUcsDailyPrice(day,i*2);
+			//TempAgentData.setUcsDailylevel(day,i);
+			//TempAgentData.setUcsDailyPrice(day,i*2);
+			
+			/**need to be replaced by real values !!!!!!! 
+			 * the values should be a mean of several of different games 
+			 * and also the current game so the result would be 
+			 * proper 
+			 * it will be using in new class which collect all reports ( will be done tommorow) .
+			 * **/
+			ucsHistory.setUcsDaily(day, i, i*2, i, i);
+			
 		}
-		ucsHistory.GameStats.put(2,TempAgentData); // for game 2 add this ucs data
 		
 		// end of dummy code this code should be filled with real games data !
 			
 		ucsBidder = new UcsBidder(ucsHistory,pendingCampaign.impsTogo());
-		ucsBidder.setUSCAvrages(day,2); // calculating the average.
+		//ucsBidder.setUSCAvrages(day,2); // calculating the average.
 
 		
 		ucsBidder.setCurrentUcsLevel(0.0);

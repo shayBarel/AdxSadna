@@ -6,6 +6,11 @@ public class UcsDailyReport {
 	public double target;
 	public double bid;
 	
+	
+	public UcsDailyReport(){
+	}
+
+	
 	public UcsDailyReport(double level,double price,double target,double bid){
 		this.level = level;
 		this.price = price;

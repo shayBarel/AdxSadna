@@ -38,28 +38,28 @@ public UcsBidder(UcsHistory ucsHistroy,double ImpressionLeft) {
 	}
 
 	// this astrategy is only for the first 20 days .
-	  public void setUSCAvrages(int NumOfDay, int gameNum)
-	  {	  
-	    double SumUSCLevel = 0.0;
-	    double sumPrice = 0.0;
-	    
-	    
-	    for (int i = 1; i < NumOfDay; i++)
-	    {
-
-//	     if (agentData.UcsHistory.getCurrentAgentDataReport(i,gameNum) != null) {
-//	        TempagentData= agentData.uscHistory.getCurrentAgentDataReport(i, gameNum);
-//	     }
-	    
-	    
-	      SumUSCLevel += ucsHistroy.getUcsDailylevel(i,gameNum);
-	      sumPrice += ucsHistroy.getUcsDailyPrice(i,gameNum);
-	     
-	    }
-	    
-	      this.avgUSCLevel = (SumUSCLevel / NumOfDay);
-	      this.avgUcsPrice = (sumPrice / NumOfDay);
-	  }
+//	  public void setUSCAvrages(int NumOfDay, int gameNum)
+//	  {	  
+//	    double SumUSCLevel = 0.0;
+//	    double sumPrice = 0.0;
+//	    
+//	    
+//	    for (int i = 1; i < NumOfDay; i++)
+//	    {
+//
+////	     if (agentData.UcsHistory.getCurrentAgentDataReport(i,gameNum) != null) {
+////	        TempagentData= agentData.uscHistory.getCurrentAgentDataReport(i, gameNum);
+////	     }
+//	    
+//	    
+//	      SumUSCLevel += ucsHistroy.getUcsDailylevel(i,gameNum);
+//	      sumPrice += ucsHistroy.getUcsDailyPrice(i,gameNum);
+//	     
+//	    }
+//	    
+//	      this.avgUSCLevel = (SumUSCLevel / NumOfDay);
+//	      this.avgUcsPrice = (sumPrice / NumOfDay);
+//	  }
 	  
 	  public void CalculateTargetUCS(int NumOfDay,int gameNum)
 	  {
@@ -105,6 +105,8 @@ public UcsBidder(UcsHistory ucsHistroy,double ImpressionLeft) {
 	  
 	  public double getUCSbid(int day,int gameNum){
 		  CalculateTargetUCS(day,gameNum);
+		  
+		   // this is the target value we need to get to ...
 		  double ucsBid;
 		  double ucsBid1;
 		  double ucsBid2;
@@ -129,9 +131,43 @@ public UcsBidder(UcsHistory ucsHistroy,double ImpressionLeft) {
 			  log.log(Level.FINE, "UcsBid algo for days follow 20 ( regression ) ");
 
 			  SimpleRegression regression = new SimpleRegression();
-
-			  ucsBid =  Math.random()*4; // to be replaced by regression.
 			  
+			  /** regression implementation : **/
+			  
+			  for (int i=0 ; i<= day;i++)
+			  {
+				  UcsDailyReport udp = this.ucsHistroy.getUcsDaily(day);
+				  
+				  double lev = udp.getLevel();
+				  double pri = udp.getPrice();
+				  
+				  if (lev == 0 ){
+					  log.log(Level.FINE, "Ucs history level of day:"+day+"is: 0");
+				  }
+				  
+				  if (pri == 0 ){
+					  log.log(Level.FINE, "Ucs history price of day:"+day+"is: 0");  
+				  }
+				  
+				  
+				  regression.addData(pri, lev);
+				  
+			  }
+		 
+			  double slope = regression.getSlope();
+			  double intercept = regression.getIntercept();
+			  
+			  if (slope == 0 ){
+				  log.log(Level.FINE, "Ucs regression slope is 0  got random value");  
+
+				  ucsBid = Math.random()*0.5;
+			  }
+			  
+			  else{
+				  ucsBid = (getTargetUCS()-intercept)/slope;
+			  }
+			  
+					  
 		  }
 		  previousBid = ucsBid;
 		  
