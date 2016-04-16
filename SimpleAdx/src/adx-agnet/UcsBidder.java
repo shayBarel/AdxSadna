@@ -172,7 +172,7 @@ public UcsBidder(UcsHistory ucsHistroy,double ImpressionLeft) {
 		  previousBid = ucsBid;
 		  
 		  
-		  log.log(Level.FINE, "UcsBid result is : %d ",ucsBid);
+		  log.log(Level.FINE, String.format("UcsBid result is : %f ",ucsBid));
 
 		  return ucsBid;
 		  
