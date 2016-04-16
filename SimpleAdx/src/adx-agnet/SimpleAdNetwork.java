@@ -173,14 +173,19 @@ public class SimpleAdNetwork extends Agent {
 			} else if (content instanceof ReservePriceInfo) {
 				// ((ReservePriceInfo)content).getReservePriceType();
 			} else {
-				System.out.println("UNKNOWN Message Received: " + content);
+				this.log.info("UNKNOWN Message Received: " + content);
 			}
 
-		} catch (NullPointerException e) {
+		} 
+		
+		catch (Exception e) 
+		{
 			this.log.log(Level.SEVERE,
 					"Exception thrown while trying to parse message." + e);
-			throw e;
+			System.err.println("Exception thrown while trying to parse message." + e); 
 		}
+
+		
 	}
 
 	private void hadnleCampaignAuctionReport(CampaignAuctionReport content) {
@@ -223,8 +228,8 @@ public class SimpleAdNetwork extends Agent {
 	 */
 	private void handleInitialCampaignMessage(
 			InitialCampaignMessage campaignMessage) {
-		System.out.println(campaignMessage.toString());
-
+		log.info(campaignMessage.toString());
+		
 		day = 0;
 
 		initialCampaignMessage = campaignMessage;
@@ -245,7 +250,7 @@ public class SimpleAdNetwork extends Agent {
 		 * The initial campaign is already allocated to our agent so we add it
 		 * to our allocated-campaigns list.
 		 */
-		System.out.println("Day " + day + ": Allocated campaign - " + campaignData);
+		log.info("Day " + day + ": Allocated campaign - " + campaignData);
 		//myCampaigns.put(initialCampaignMessage.getId(), campaignData);
 		CompetitionData curr_competition = GetCurrCompetition();
 		curr_competition.GetMyCampaigns().put(initialCampaignMessage.getId(), campaignData);
@@ -264,7 +269,7 @@ public class SimpleAdNetwork extends Agent {
 		day = com.getDay();
 
 		pendingCampaign = new CampaignData(com);
-		System.out.println("Day " + day + ": Campaign opportunity - " + pendingCampaign);
+		log.info("Day " + day + ": Campaign opportunity - " + pendingCampaign);
 
 		
 		log.fine(String.format("computing bid for campaign %d (days: %d to %d,"
@@ -290,7 +295,7 @@ public class SimpleAdNetwork extends Agent {
 		log.fine(String.format("given bid value : %d .", cmpBidMillis ) );
 				
 		
-		System.out.println("Day " + day + ": Campaign total budget bid (millis): " + cmpBidMillis);
+		log.info("Day " + day + ": Campaign total budget bid (millis): " + cmpBidMillis);
 
 		/*
 		 * Adjust ucs bid s.t. target level is achieved. Note: The bid for the
@@ -331,10 +336,10 @@ public class SimpleAdNetwork extends Agent {
 			
 			//try to always win maximum UCS level.
 			ucsBid = ucsBidder.getUCSbid(day,gameNum);
-			System.out.println("Day " + day + ": ucs level reported: " + ucsLevel);
+			log.info("Day " + day + ": ucs level reported: " + ucsLevel);
 		} else {
 			ucsBid = ucsBidder.getUCSbid(day,gameNum);
-			System.out.println("Day " + day + ": Initial ucs bid is " + ucsBid);
+			log.info("Day " + day + ": Initial ucs bid is " + ucsBid);
 		}
 
 		
@@ -361,7 +366,7 @@ public class SimpleAdNetwork extends Agent {
 
 		adNetworkDailyNotification = notificationMessage;
 
-		System.out.println("Day " + day + ": Daily notification for campaign "
+		log.info("Day " + day + ": Daily notification for campaign "
 				+ adNetworkDailyNotification.getCampaignId());
 
 		String campaignAllocatedTo = " allocated to "
@@ -414,7 +419,7 @@ public class SimpleAdNetwork extends Agent {
 			competition.GetOthersCampaigns().put(pendingCampaign.id, pendingCampaign);
 		}
 		
-		System.out.println("Day " + day + ": " + campaignAllocatedTo
+		log.info("Day " + day + ": " + campaignAllocatedTo
 				+ ". UCS Level set to " + notificationMessage.getServiceLevel()
 				+ " at price " + notificationMessage.getPrice()
 				+ " Quality Score is: " + notificationMessage.getQualityScore());
@@ -432,9 +437,9 @@ public class SimpleAdNetwork extends Agent {
 	 * to the AdX.
 	 */
 	private void handleSimulationStatus(SimulationStatus simulationStatus) {
-		System.out.println("Day " + day + " : Simulation Status Received");
+		log.info("Day " + day + " : Simulation Status Received");
 		sendBidAndAds();
-		System.out.println("Day " + day + " ended. Starting next day");
+		log.info("Day " + day + " ended. Starting next day");
 		++day;
 	}
 
@@ -469,7 +474,7 @@ public class SimpleAdNetwork extends Agent {
 		for (Map.Entry<Integer, CampaignData> entry : myCampaigns.entrySet())
 		{
 			
-		    System.out.println(entry.getKey() + "/" + entry.getValue());
+			log.info(entry.getKey() + "/" + entry.getValue());
 		    
 		    CampaignData cmp = entry.getValue();
 		    
@@ -541,7 +546,7 @@ public class SimpleAdNetwork extends Agent {
 				bidBundle.setCampaignDailyLimit(cmp.id,
 						(int) impressionLimit, budgetLimit);
 	
-				System.out.println("Day " + day + ": Updated " + entCount
+				log.info("Day " + day + ": Updated " + entCount
 						+ " Bid Bundle entries for Campaign id " + cmp.id);
 				
 			}
@@ -552,7 +557,7 @@ public class SimpleAdNetwork extends Agent {
 		//send the bid bundle after finishing with all campaigns
 		if (bidBundle != null) 
 		{
-			System.out.println("Day " + day + ": Sending BidBundle");
+			log.info("Day " + day + ": Sending BidBundle");
 			sendMessage(adxAgentAddress, bidBundle);
 		}
 		
@@ -603,11 +608,11 @@ public class SimpleAdNetwork extends Agent {
 	 * Users and Publishers statistics: popularity and ad type orientation
 	 */
 	private void handleAdxPublisherReport(AdxPublisherReport adxPublisherReport) {
-		System.out.println("Publishers Report: ");
+		log.info("Publishers Report: ");
 		for (PublisherCatalogEntry publisherKey : adxPublisherReport.keys()) {
 			AdxPublisherReportEntry entry = adxPublisherReport
 					.getEntry(publisherKey);
-			System.out.println(entry.toString());
+			log.info(entry.toString());
 		}
 	}
 
@@ -750,8 +755,7 @@ public class SimpleAdNetwork extends Agent {
 
 		campaignData.setCampaignQueries(new AdxQuery[campaignQueriesSet.size()]);
 		campaignQueriesSet.toArray(campaignData.getCampaignQueries());
-		System.out.println("!!!!!!!!!!!!!!!!!!!!!!"+Arrays.toString(campaignData.getCampaignQueries())+"!!!!!!!!!!!!!!!!");
-		
+		log.info("!!!!!!!!!!!!!!!!!!!!!!"+Arrays.toString(campaignData.getCampaignQueries())+"!!!!!!!!!!!!!!!!");
 
 	}
 
