@@ -1,11 +1,7 @@
 import tau.tac.adx.report.adn.MarketSegment;
-import tau.tac.adx.users.properties.Age;
-import tau.tac.adx.users.properties.Gender;
-import tau.tac.adx.users.properties.Income;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Logger;
 
 
 public class Test_Population 
