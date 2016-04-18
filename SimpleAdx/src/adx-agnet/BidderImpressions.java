@@ -9,7 +9,11 @@ public class BidderImpressions
 	
 	public static final double anotherFactor = 5.0 ;
 	
-	double GenerateImpressionBid (CampaignData campaign , AdxQuery query)
+	public static final double IMPRESSION_URGENCY_FACTOR = 2.5 ;
+	
+	public static final double MIN_PERCENT_COMPLETION = 0.85 ;
+	
+	double GenerateImpressionBid (CampaignData campaign, AdxQuery query, int dayBiddingFor)
 	{
 		
 				
@@ -39,7 +43,18 @@ public class BidderImpressions
 		
 		//TODO if
 		
-		//TODO if
+		//urgency: when approaching end of campaign - raise the impression bid by factor .
+		if (( dayBiddingFor == campaign.dayEnd  ||  dayBiddingFor == (campaign.dayEnd-1) )
+			&& (percentCompletion < MIN_PERCENT_COMPLETION)) 
+		{
+			
+			wantedbudget = wantedbudget * IMPRESSION_URGENCY_FACTOR ; 
+			
+			log.fine(String.format("reaching end campaign with low completion percent %f."
+					+ " (bidding for day %d, campaign ends in day %d.) "
+					+ " raising price by factor %f. updated price :%f "
+					, percentCompletion, dayBiddingFor, campaign.dayEnd, IMPRESSION_URGENCY_FACTOR, wantedbudget));
+		}
 		
 		double result = (wantedbudget / impsToGo) * anotherFactor ;
 		log.fine(String.format("final decision: %f", result));

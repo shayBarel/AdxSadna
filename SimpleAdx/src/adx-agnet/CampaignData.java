@@ -1,5 +1,5 @@
 import java.util.Set;
-import java.util.logging.Logger;
+
 
 import tau.tac.adx.demand.CampaignStats;
 import tau.tac.adx.props.AdxQuery;

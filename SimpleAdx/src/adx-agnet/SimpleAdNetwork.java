@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
@@ -517,7 +516,7 @@ public class SimpleAdNetwork extends Agent {
 
 				    //rbid = PI_indicator.impBidder(cmp, myCampaigns, allCampaigns, day, ucsTargetLevel);
 					BidderImpressions bidder = new BidderImpressions() ;
-					rbid = bidder.GenerateImpressionBid(cmp, query);
+					rbid = bidder.GenerateImpressionBid(cmp, query, dayBiddingFor);
 					log.fine(String.format("generated impression bid for query %s, and campaign %d. "
 							+" bid: %f",
 							query.toString(), cmp.id, rbid));
