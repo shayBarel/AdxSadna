@@ -124,7 +124,7 @@ public void setPreviousBid(double previousBid) {
 			  
 			  ucsBid1 = Math.min(0.12 + 0.19*getTargetUCS()
 					  + (0.1-day*0.016),0.12 -day*0.01
-					  + this.getPreviousBid()*(1+(getTargetUCS()-this.getAvgUSCLevel())));
+					  + this.getPreviousBid()*(1+(getTargetUCS()-this.getCurrentUcsLevel())));
 			  
 //			  ucsBid2 = Math.min(0.12 + 0.19*getTargetUCS()
 //			  + (0.1-day*0.016),0.12 -day*0.01
@@ -174,6 +174,8 @@ public void setPreviousBid(double previousBid) {
 			  
 			  else{
 				  ucsBid = (getTargetUCS()-intercept)/slope;
+				  log.log(Level.FINE, String.format("Calculated UcsBid result/slope/inter are : %f %f %f",ucsBid,slope,intercept));
+
 			  }
 			  
 					  

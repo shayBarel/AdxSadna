@@ -310,21 +310,27 @@ public class SimpleAdNetwork extends Agent {
 		 * Adjust ucs bid s.t. target level is achieved. Note: The bid for the
 		 * user classification service is piggybacked
 		 */
-		
-		UcsBidder ucsBidder = null;
-		ucsBidder = new UcsBidder(ucsHistory,competition.TatalImpLeft());
-
+           
 		
 		if (adNetworkDailyNotification != null) {
 			double ucsLevel = adNetworkDailyNotification.getServiceLevel();
-			ucsBidder.setCurrentUcsLevel(ucsLevel);
 			
 			
 			if (day > 1 && day <=20)
 			{
+				log.info("Day " + day + ": enter the value to ucs History, level: " + ucsLevel+"price"+adNetworkDailyNotification.getPrice()+"previous bid"+previousBid);
+
 			ucsHistory.setUcsDaily(day-1, ucsLevel, adNetworkDailyNotification.getPrice(), 0,previousBid );
 			}
 			
+			UcsBidder ucsBidder = null;
+			
+			log.info("Day " + day + "Total imp are : "+competition.TatalImpLeft());
+
+			
+			ucsBidder = new UcsBidder(ucsHistory,competition.TatalImpLeft());
+		
+			ucsBidder.setCurrentUcsLevel(ucsLevel);
 			ucsBidder.setPreviousBid(previousBid);
 			//ucsBidder.setUSCAvrages(day,2); // calculating the average.
 
@@ -335,6 +341,14 @@ public class SimpleAdNetwork extends Agent {
 			ucsBid = ucsBidder.getUCSbid(day,gameNum);
 			log.info("Day " + day + ": ucs level reported: " + ucsLevel);
 		} else {
+			int Day2;
+			Day2 = day -1;
+			if (day < 1 )
+				Day2 = day;
+			ucsHistory.setUcsDaily(Day2, 0, 0, 0,previousBid );
+			UcsBidder ucsBidder = new UcsBidder(ucsHistory,competition.TatalImpLeft());
+			ucsBidder.setPreviousBid(previousBid);
+
 			ucsBid = ucsBidder.getUCSbid(day,gameNum);
 			log.info("Day " + day + ": Initial ucs bid is " + ucsBid);
 		}

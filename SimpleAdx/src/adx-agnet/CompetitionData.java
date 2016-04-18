@@ -53,11 +53,14 @@ public class CompetitionData
 		Map<Integer, CampaignData> map = GetMyCampaigns();
 		double sum = 0 ;
 		   Iterator it = map.entrySet().iterator();
+		   
+			System.err.println("######## MAP SIZE IS : "+map.size()); 
+
 		    while (it.hasNext()) {
 		        Map.Entry pair = (Map.Entry)it.next();
 		        CampaignData camp = (CampaignData)pair.getValue();
 		        sum+= camp.impsTogo();
-		        it.remove(); // avoids a ConcurrentModificationException
+		        //it.remove(); // avoids a ConcurrentModificationException
 		            
 		    }
 	
