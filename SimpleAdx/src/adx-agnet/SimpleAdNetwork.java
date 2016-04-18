@@ -74,7 +74,11 @@ public class SimpleAdNetwork extends Agent {
 	private PublisherCatalog publisherCatalog;
 	private InitialCampaignMessage initialCampaignMessage;
 	private AdNetworkDailyNotification adNetworkDailyNotification;
-
+	// dummy code to be deleted ;
+	//AgentUcsData TempAgentData = new AgentUcsData();
+	public static UcsHistory ucsHistory;
+	
+	public double previousBid;
 	/*
 	 * The addresses of server entities to which the agent should send the daily
 	 * bids data
@@ -182,6 +186,11 @@ public class SimpleAdNetwork extends Agent {
 		{
 			this.log.log(Level.SEVERE,
 					"Exception thrown while trying to parse message." + e);
+			this.log.log(Level.SEVERE,
+					"Exception thrown while trying to parse message." + e);
+			
+			e.printStackTrace();
+			
 			System.err.println("Exception thrown while trying to parse message." + e); 
 		}
 
@@ -302,35 +311,23 @@ public class SimpleAdNetwork extends Agent {
 		 * user classification service is piggybacked
 		 */
 		
-		UcsBidder ucsBidder;
-		UcsHistory ucsHistory = new UcsHistory();
-		// dummy code to be deleted ;
-		//AgentUcsData TempAgentData = new AgentUcsData();
-		for (int i =0 ; i<=20;i++)
-		{
-			//TempAgentData.setUcsDailylevel(day,i);
-			//TempAgentData.setUcsDailyPrice(day,i*2);
-			
-			/**need to be replaced by real values !!!!!!! 
-			 * the values should be a mean of several of different games 
-			 * and also the current game so the result would be 
-			 * proper 
-			 * it will be using in new class which collect all reports ( will be done tommorow) .
-			 * **/
-			ucsHistory.setUcsDaily(day, i, i*2, i, i);
-			
-		}
-		
-		// end of dummy code this code should be filled with real games data !
-			
-		ucsBidder = new UcsBidder(ucsHistory,pendingCampaign.impsTogo());
-		//ucsBidder.setUSCAvrages(day,2); // calculating the average.
+		UcsBidder ucsBidder = null;
+		ucsBidder = new UcsBidder(ucsHistory,competition.TatalImpLeft());
 
 		
-		ucsBidder.setCurrentUcsLevel(0.0);
 		if (adNetworkDailyNotification != null) {
 			double ucsLevel = adNetworkDailyNotification.getServiceLevel();
 			ucsBidder.setCurrentUcsLevel(ucsLevel);
+			
+			
+			if (day > 1 && day <=20)
+			{
+			ucsHistory.setUcsDaily(day-1, ucsLevel, adNetworkDailyNotification.getPrice(), 0,previousBid );
+			}
+			
+			ucsBidder.setPreviousBid(previousBid);
+			//ucsBidder.setUSCAvrages(day,2); // calculating the average.
+
 
 			//ucsBid = 0.1 + random.nextDouble()/10.0;
 			
@@ -349,6 +346,8 @@ public class SimpleAdNetwork extends Agent {
 		{
 			ucsBid = GameFactorDefaults.UCS_DEFAULT_LEVEL;
 		}
+		
+		previousBid = ucsBid;
 		
 		/* Note: Campaign bid is in millis */
 		AdNetBidMessage bids = new AdNetBidMessage(ucsBid, pendingCampaign.id, cmpBidMillis);
@@ -586,6 +585,8 @@ public class SimpleAdNetwork extends Agent {
 			
 			//find campaign in our collection, and update its statistics .
 			CampaignData campaign = competition.GetMyCampaigns().get(cmpId);
+			if (campaign != null)
+			{
 			campaign.setStats(cstats);
 			
 			//update campaign based on statistics .
@@ -600,6 +601,7 @@ public class SimpleAdNetwork extends Agent {
 
 			log.fine(String.format("campaign %d: remaining budget was updated to %f", 
 					cmpId, campaign.get_remainingBudgetMillis()));
+			}
 		
 		}
 	}
@@ -653,10 +655,33 @@ public class SimpleAdNetwork extends Agent {
 		
 		/* initial bid between 0.1 and 0.2 */
 		ucsBid = 0.1 + random.nextDouble()/10.0;
+		
+		init_UcsHistory();
 
 
 		log.fine("AdNet " + getName() + " simulationSetup");
 	}
+	
+	public void init_UcsHistory(){
+		 ucsHistory = new UcsHistory();
+		// dummy code to be deleted ;
+		//AgentUcsData TempAgentData = new AgentUcsData();
+		for (int i =0 ; i<=20;i++)
+		{
+			//TempAgentData.setUcsDailylevel(day,i);
+			//TempAgentData.setUcsDailyPrice(day,i*2);
+			
+			/**need to be replaced by real values !!!!!!! 
+			 * the values should be a mean of several of different games 
+			 * and also the current game so the result would be 
+			 * proper 
+			 * it will be using in new class which collect all reports ( will be done tommorow) .
+			 * **/
+			ucsHistory.setUcsDaily(day, i, i*2, i, i);
+			
+		}
+	}
+	
 	
 	@Override
 	protected void simulationFinished() {

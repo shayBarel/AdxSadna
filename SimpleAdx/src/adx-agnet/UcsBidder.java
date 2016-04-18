@@ -61,7 +61,15 @@ public UcsBidder(UcsHistory ucsHistroy,double ImpressionLeft) {
 //	      this.avgUcsPrice = (sumPrice / NumOfDay);
 //	  }
 	  
-	  public void CalculateTargetUCS(int NumOfDay,int gameNum)
+	  public double getPreviousBid() {
+	return previousBid;
+}
+
+public void setPreviousBid(double previousBid) {
+	this.previousBid = previousBid;
+}
+
+	public void CalculateTargetUCS(int NumOfDay,int gameNum)
 	  {
 		  if(getImpressionLeft()==0)
 		  {
@@ -109,7 +117,6 @@ public UcsBidder(UcsHistory ucsHistroy,double ImpressionLeft) {
 		   // this is the target value we need to get to ...
 		  double ucsBid;
 		  double ucsBid1;
-		  double ucsBid2;
 		  
 		  if (day < 20 ){
 			  
@@ -117,13 +124,15 @@ public UcsBidder(UcsHistory ucsHistroy,double ImpressionLeft) {
 			  
 			  ucsBid1 = Math.min(0.12 + 0.19*getTargetUCS()
 					  + (0.1-day*0.016),0.12 -day*0.01
-					  + previousBid*(1+(getTargetUCS()-avgUSCLevel)));
+					  + this.getPreviousBid()*(1+(getTargetUCS()-this.getAvgUSCLevel())));
 			  
-			  ucsBid2 = Math.min(0.12 + 0.19*getTargetUCS()
-			  + (0.1-day*0.016),0.12 -day*0.01
-			  + previousBid*(1+(getTargetUCS()-CurrentUcsLevel)));
-			  
-			  ucsBid = Math.min(ucsBid1, ucsBid2);
+//			  ucsBid2 = Math.min(0.12 + 0.19*getTargetUCS()
+//			  + (0.1-day*0.016),0.12 -day*0.01
+//			  + this.getPreviousBid()*(1+(getTargetUCS()-CurrentUcsLevel)));
+//			  
+//			  ucsBid = Math.min(ucsBid1, ucsBid2);
+			  			  
+			  ucsBid = ucsBid1;
 			  
 		  }
 		  else {
@@ -169,7 +178,7 @@ public UcsBidder(UcsHistory ucsHistroy,double ImpressionLeft) {
 			  
 					  
 		  }
-		  previousBid = ucsBid;
+		  //previousBid = ucsBid;
 		  
 		  
 		  log.log(Level.FINE, String.format("UcsBid result is : %f ",ucsBid));
@@ -177,6 +186,22 @@ public UcsBidder(UcsHistory ucsHistroy,double ImpressionLeft) {
 		  return ucsBid;
 		  
 	  }
+
+		public double getAvgUSCLevel() {
+		return avgUSCLevel;
+	}
+
+	public void setAvgUSCLevel(double avgUSCLevel) {
+		this.avgUSCLevel = avgUSCLevel;
+	}
+
+	public double getAvgUcsPrice() {
+		return avgUcsPrice;
+	}
+
+	public void setAvgUcsPrice(double avgUcsPrice) {
+		this.avgUcsPrice = avgUcsPrice;
+	}
 
 		public double getImpressionLeft() {
 			return ImpressionLeft;

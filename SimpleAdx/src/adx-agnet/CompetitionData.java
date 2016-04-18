@@ -46,6 +46,23 @@ public class CompetitionData
 	{
 		return _myCampaigns;
 	}
+	
+	
+	public double TatalImpLeft(){
+		
+		Map<Integer, CampaignData> map = GetMyCampaigns();
+		double sum = 0 ;
+		   Iterator it = map.entrySet().iterator();
+		    while (it.hasNext()) {
+		        Map.Entry pair = (Map.Entry)it.next();
+		        CampaignData camp = (CampaignData)pair.getValue();
+		        sum+= camp.impsTogo();
+		        it.remove(); // avoids a ConcurrentModificationException
+		            
+		    }
+	
+		return sum;
+	}
 
 	public void SetMyCampaigns(Map<Integer, CampaignData> myCampaigns) 
 	{
