@@ -75,7 +75,7 @@ public class SimpleAdNetwork extends Agent {
 	private AdNetworkDailyNotification adNetworkDailyNotification;
 	// dummy code to be deleted ;
 	//AgentUcsData TempAgentData = new AgentUcsData();
-	public static UcsHistory ucsHistory;
+	public UcsHistory ucsHistory;
 	
 	public double previousBid;
 	/*
@@ -319,15 +319,15 @@ public class SimpleAdNetwork extends Agent {
 			{
 				log.info("Day " + day + ": enter the value to ucs History, level: " + ucsLevel+"price"+adNetworkDailyNotification.getPrice()+"previous bid"+previousBid);
 
-			ucsHistory.setUcsDaily(day-1, ucsLevel, adNetworkDailyNotification.getPrice(), 0,previousBid );
+				ucsHistory.setUcsDaily(day-1, ucsLevel, adNetworkDailyNotification.getPrice(), 0,previousBid );
 			}
 			
-			UcsBidder ucsBidder = null;
+
 			
 			log.info("Day " + day + "Total imp are : "+competition.TatalImpLeft());
 
 			
-			ucsBidder = new UcsBidder(ucsHistory,competition.TatalImpLeft());
+			UcsBidder ucsBidder = new UcsBidder(ucsHistory,competition.TatalImpLeft());
 		
 			ucsBidder.setCurrentUcsLevel(ucsLevel);
 			ucsBidder.setPreviousBid(previousBid);
@@ -669,6 +669,9 @@ public class SimpleAdNetwork extends Agent {
 		/* initial bid between 0.1 and 0.2 */
 		ucsBid = 0.1 + random.nextDouble()/10.0;
 		
+		
+		//init UCS history .
+		
 		init_UcsHistory();
 
 
@@ -676,7 +679,7 @@ public class SimpleAdNetwork extends Agent {
 	}
 	
 	public void init_UcsHistory(){
-		 ucsHistory = new UcsHistory();
+		ucsHistory = new UcsHistory();
 		// dummy code to be deleted ;
 		//AgentUcsData TempAgentData = new AgentUcsData();
 		for (int i =0 ; i<=20;i++)
