@@ -12,8 +12,8 @@ public class UcsHistory {
 	
 	UcsHistory(){
 		
-		GameStats = new HashMap<>();
-		
+		GameStats = new HashMap<Integer,UcsDailyReport>();
+
 		//Initialize map for safety resons.
 		
 		for (int i=0 ; i<=MAX_NUMBER_OF_DAYS; i++)

@@ -145,20 +145,15 @@ public void setPreviousBid(double previousBid) {
 			  
 			  for (int i=0 ; i<= day;i++)
 			  {
-				  UcsDailyReport udp = this.ucsHistroy.getUcsDaily(day);
+				  UcsDailyReport udp = this.ucsHistroy.getUcsDaily(i);
 				  
 				  double lev = udp.getLevel();
 				  double pri = udp.getPrice();
 				  
-				  if (lev == 0 ){
-					  log.log(Level.FINE, "Ucs history level of day:"+day+"is: 0");
-				  }
+				  log.fine(String.format("Ucs history for day:%d level: %f, price%f ", i, lev, pri));
 				  
-				  if (pri == 0 ){
-					  log.log(Level.FINE, "Ucs history price of day:"+day+"is: 0");  
-				  }
-				  
-				  
+
+
 				  regression.addData(pri, lev);
 				  
 			  }
