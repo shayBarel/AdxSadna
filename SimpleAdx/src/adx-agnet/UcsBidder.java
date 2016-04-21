@@ -152,17 +152,16 @@ public void setPreviousBid(double previousBid) {
 				  
 				  log.fine(String.format("Ucs history for day:%d level: %f, price%f ", i, lev, pri));
 				  
-
-				  
-				  regression.addData(pri, lev);
+				  if (lev!=0 && pri!=0)
+					  regression.addData(pri, lev);
 				  
 			  }
 		 
 			  double slope = regression.getSlope();
 			  double intercept = regression.getIntercept();
 			  
-			  if (slope == 0 ){
-				  log.log(Level.FINE, "Ucs regression slope is 0  got random value");  
+			  if (slope == 0 || slope == Double.NaN || intercept == Double.NaN){
+				  log.log(Level.FINE, "Ucs regression slope/intercept is 0/NaN  got random value");  
 
 				  ucsBid = Math.random()*0.5;
 			  }
