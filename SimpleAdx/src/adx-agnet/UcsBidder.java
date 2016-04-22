@@ -143,7 +143,7 @@ public void setPreviousBid(double previousBid) {
 			  
 			  /** regression implementation : **/
 			  
-			  for (int i=0 ; i<= day;i++)
+			  for (int i=0 ; i<= day-1;i++)
 			  {
 				  UcsDailyReport udp = this.ucsHistroy.getUcsDaily(i);
 				  
