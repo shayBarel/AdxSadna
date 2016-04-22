@@ -30,6 +30,23 @@ public class BidderImpressions
 		log.fine(String.format("percent of completion: %f", percentCompletion));
 		
 		
+		//compute estimated completion percent , according to campaign rate so far.
+		double estimatedPercentNextDay = 
+				ComputeEstimatedPercentNextDayByRate (campaign, percentCompletion, dayBiddingFor) ;
+		
+		//try to limit campaign with good rate of completion
+		if (estimatedPercentNextDay > GameFactorDefaults.IMPRESSIONS_LIMIT_FOR_EXPECTED_GOOD_COMPLETION_PERCENT )
+		{
+			log.fine(String.format("campaign %d is expected to reach good completion percent "
+					+" (over %f) "
+					+ " on next day: %d, expected percent: %f" 
+					+ " current day: %d, current percent: %f",
+					campaign.id, GameFactorDefaults.IMPRESSIONS_LIMIT_FOR_EXPECTED_GOOD_COMPLETION_PERCENT, 
+					dayBiddingFor, estimatedPercentNextDay,
+					(dayBiddingFor-1), percentCompletion));
+			return 0.0 ;
+		}
+		
 		//remaining budget 
 		double remainBudget = campaign.get_remainingBudgetMillis() * 1000;
 		log.fine(String.format("remain budget: %f", remainBudget));
@@ -64,5 +81,39 @@ public class BidderImpressions
 		
 	}
 	
+	
+	
+	double ComputeEstimatedPercentNextDayByRate (CampaignData campaign, double percentSoFar, 
+			int dayBiddingFor)
+	{
+		
+		Logger log = Logger.getLogger(SimpleAdNetwork.class.getName());
+		
+		//note: current day we already have a running impressions. 
+		//the last day with data (that is counted inside the completion rate
+		//is actually dayBiddingFor-2).
+		int currentDay = dayBiddingFor - 1; 
+		int daysSoFar = currentDay - (int) campaign.getDayStart();
+		
+		log.fine(String.format("while computing estimated completion percent for next day: %d."
+				+ ", current (now running) day: %d, percent so far: %f, days so far: %d", 
+				dayBiddingFor, currentDay, percentSoFar, daysSoFar));
+		
+		if (daysSoFar <= 0)
+		{
+			//no point in calculating on first days
+			return 0.0 ; 
+		}
+		
+		//compute completion rate so far
+		double rate = percentSoFar / (double) daysSoFar ;
+		
+		//compute estimated completion percent for next day 
+		double result = percentSoFar + rate;
+		log.fine (String.format("estimated completion percent: %f for day: %d", 
+				result, dayBiddingFor)) ; 
+		
+		return result ; 
+	}
 	
 }

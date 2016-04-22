@@ -55,8 +55,14 @@ public class BidderCampaignEfficient extends BidderCampaign {
 		
 
 		// fix according to min.max bound
-		long result_bid = FixBidMinimumMaximumBound(pending_campaign, tmpResult);
+		long tmpResult2 = FixBidMinimumMaximumBound(pending_campaign, tmpResult);
 
+		
+		//get more extreme result (minimum or maximum)
+		long result_bid = BringBidToMinOrMaxCompetitive(pending_campaign, tmpResult2);
+		
+		
+		
 		return result_bid;
 
 	}
@@ -93,4 +99,40 @@ public class BidderCampaignEfficient extends BidderCampaign {
 
 	}
 
+	
+	/** 
+	 * try to get more extreme results (bring to minimum or maximum) .
+	 * note!: assumes bid is already between maximum and minimum . 
+	 * @param pending_campaign
+	 * @param original_bid
+	 * @return
+	 */
+	private long BringBidToMinOrMaxCompetitive(CampaignData pending_campaign, double original_bid)
+	{
+		Logger log = Logger.getLogger(SimpleAdNetwork.class.getName());
+		
+		BidderCampaignMinimum min_bidder = new BidderCampaignMinimum();
+		long min_bid = min_bidder.GetMinimumBid(pending_campaign);
+			
+		BidderCampaignMaximum max_bidder = new BidderCampaignMaximum();
+		long max_bid = max_bidder.GetMaximumBid(pending_campaign);
+
+		//take the average between min bid and max bid .
+		double mid_point = (min_bid + max_bid) / 2 ;
+		if (original_bid > mid_point)
+		{
+			//bring to max .
+			log.fine(String.format("brought contract bid to max. original: %f, max: %d, mid point: %f", original_bid, max_bid, mid_point));
+			return max_bid;
+		}
+		else
+		{
+			//bring to min .
+			log.fine(String.format("brought contract bid to min. original: %f, max: %d, mid point: %f", original_bid, min_bid, mid_point));
+			return min_bid ;
+		}
+			
+		
+	}
+	
 }
