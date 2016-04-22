@@ -315,7 +315,7 @@ public class SimpleAdNetwork extends Agent {
 			double ucsLevel = adNetworkDailyNotification.getServiceLevel();
 			
 			
-			if (day > 1 && day <=20)
+			if (day > 1)
 			{
 				log.info("Day " + day + ": enter the value to ucs History, level: " + ucsLevel+"price"+adNetworkDailyNotification.getPrice()+"previous bid"+previousBid);
 
