@@ -355,7 +355,7 @@ public class SimpleAdNetwork extends Agent {
 		
 		//temporary fix
 		//when UCS turned out negative or NaN- fixing it to be some constant .
-		if (ucsBid <= 0 || Double.isNaN(ucsBid)) 
+		if (ucsBid < 0 || Double.isNaN(ucsBid)) 
 		{
 			ucsBid = GameFactorDefaults.UCS_DEFAULT_LEVEL;
 		}
