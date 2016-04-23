@@ -1,5 +1,7 @@
 import java.util.logging.Logger;
 
+import tau.tac.adx.ads.properties.AdType;
+import tau.tac.adx.devices.Device;
 import tau.tac.adx.props.AdxQuery;
 
 public class BidderImpressions 
@@ -16,7 +18,7 @@ public class BidderImpressions
 	double GenerateImpressionBid (CampaignData campaign, AdxQuery query, int dayBiddingFor)
 	{
 		
-				
+		
 		Logger log = Logger.getLogger(SimpleAdNetwork.class.getName());
 		log.fine(String.format("computing price for impressions . campagin : %s query: %s.",
 				campaign.toString(), query.toString()));
@@ -37,7 +39,7 @@ public class BidderImpressions
 		//try to limit campaign with good rate of completion
 		if (estimatedPercentNextDay > GameFactorDefaults.IMPRESSIONS_LIMIT_FOR_EXPECTED_GOOD_COMPLETION_PERCENT )
 		{
-			log.fine(String.format("campaign %d is expected to reach good completion percent "
+			log.fine(String.format("campaign %d is expected to reach too high completion percent "
 					+" (over %f) "
 					+ " on next day: %d, expected percent: %f" 
 					+ " current day: %d, current percent: %f",
@@ -73,7 +75,30 @@ public class BidderImpressions
 					, percentCompletion, dayBiddingFor, campaign.dayEnd, IMPRESSION_URGENCY_FACTOR, wantedbudget));
 		}
 		
-		double result = (wantedbudget / impsToGo) * anotherFactor ;
+		
+		//debug - do properly
+		double videoFactor = 1.0;
+		if (query.getAdType().equals(AdType.video))
+		{
+			videoFactor = 1.4;
+		}
+
+
+		double mobileFactor = 1.0;
+		if (query.getDevice().equals(Device.mobile))
+		{
+			mobileFactor = 1.4;
+		}
+
+		
+		
+		if (dayBiddingFor>=1 && dayBiddingFor<=10)
+		{
+			wantedbudget = wantedbudget * IMPRESSION_URGENCY_FACTOR ;
+		}
+		
+		
+		double result = (wantedbudget / impsToGo) * anotherFactor * videoFactor * mobileFactor ;
 		log.fine(String.format("final decision: %f", result));
 				
 		
