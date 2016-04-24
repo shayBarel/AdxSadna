@@ -178,6 +178,18 @@ public void setPreviousBid(double previousBid) {
 		  
 		  
 		  log.log(Level.FINE, String.format("UcsBid result is : %f ",ucsBid));
+		  
+		  
+		  // border of ucsbid
+		  
+		  
+		  if (ucsBid > 0.4){
+			  ucsBid = 0.4;
+		  }
+		  
+		  if (ucsBid<0){
+			  ucsBid = 0.0;
+		  }
 
 		  return ucsBid;
 		  
