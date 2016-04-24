@@ -29,6 +29,13 @@ public class BidderCampaignEfficient extends BidderCampaign {
 
 		log.fine(String.format("computing optimal contract bid for campaign %d. ", pending_campaign.id));
 	
+		//tmp fix - avoid short cmapaing at start
+		if (pending_campaign.getDayStart()<10 && pending_campaign.getDayEnd()<10)
+		{
+			log.fine(String.format("campaign is at start of game , giving max bid "));
+			BidderCampaignMaximum max_bidder = new BidderCampaignMaximum();
+			return max_bidder.GetMaximumBid(pending_campaign);
+		}
 
 		// get the segment of campaign (only the first)
 		// handle couple of segments.

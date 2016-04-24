@@ -114,6 +114,12 @@ public void setPreviousBid(double previousBid) {
 	  public double getUCSbid(int day,int gameNum){
 		  CalculateTargetUCS(day,gameNum);
 		  
+		  //avoid bidding if target is 0 .
+		  if (getTargetUCS() <= 0)
+		  {
+			  return 0 ;
+		  }
+		  
 		   // this is the target value we need to get to ...
 		  double ucsBid;
 		  double ucsBid1;
@@ -168,6 +174,9 @@ public void setPreviousBid(double previousBid) {
 			  
 			  else{
 				  ucsBid = (getTargetUCS()-intercept)/slope;
+				  
+				  log.log(Level.FINE, String.format("target UCS level for next day(day %d) : %f", day, getTargetUCS()));
+
 				  log.log(Level.FINE, String.format("Calculated UcsBid result/slope/inter are : %f %f %f",ucsBid,slope,intercept));
 
 			  }
