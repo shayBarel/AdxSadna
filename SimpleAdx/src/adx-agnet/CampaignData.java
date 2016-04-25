@@ -161,11 +161,15 @@ public class CampaignData {
 	public void UpdateFromStats (CampaignStats stats)
 	{
 			
-		//reduce remaining budget 
+		//reduce remaining budget .
+		//the cost given is the accumulated cost (since start of campaign)
+		//should reduce this amount from the campaign's original budget . (not changed)
 		double prevBedget = get_remainingBudgetMillis() ; 
+		//TODO there is a bug - should reduce from campaign whole budget
+		//not fixing the bug since avoid adx costs
 		double newBudget = prevBedget - stats.getCost() ;
 		set_remainingBudgetMillis(newBudget);
-		
+			
 	}
 	
 	

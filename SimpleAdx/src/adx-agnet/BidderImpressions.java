@@ -58,7 +58,15 @@ public class BidderImpressions
 		//use a part of budget
 		double wantedbudget = budgetFraction * remainBudget ;
 		log.fine(String.format("all remaining budget: %f, fraction of remaining budget:%f", remainBudget, wantedbudget));
-		
+			
+		//fix cases when budget turn negative
+		if (wantedbudget <= 0)
+		{
+			wantedbudget = budgetFraction * campaign.getBudget() ;
+			log.fine(String.format("remain budget turned negative, "
+					+" use original budget instead (risk overdraft):%f", wantedbudget));
+		}
+				
 		
 		//urgency: when approaching end of campaign - raise the impression bid by factor .
 		if (( dayBiddingFor == campaign.dayEnd  ||  dayBiddingFor == (campaign.dayEnd-1) )
@@ -90,7 +98,7 @@ public class BidderImpressions
 
 		
 		
-		if (dayBiddingFor>=1 && dayBiddingFor<=10)
+		if (dayBiddingFor>=1 && dayBiddingFor<7)
 		{
 			wantedbudget = wantedbudget * IMPRESSION_URGENCY_FACTOR ;
 		}
