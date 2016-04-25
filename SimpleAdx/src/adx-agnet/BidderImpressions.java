@@ -9,9 +9,11 @@ public class BidderImpressions
 
 	public static final double budgetFraction = 0.5 ;
 	
-	public static final double anotherFactor = 3.0 ;
+	public static final double anotherFactor = 5.0 ;
 	
 	public static final double IMPRESSION_URGENCY_FACTOR = 2.5 ;
+	
+	public static final double IMPRESSION_FIRST_DAYS_FACTOR = 1.2;
 	
 	public static final double MIN_PERCENT_COMPLETION = 0.85 ;
 	
@@ -98,9 +100,11 @@ public class BidderImpressions
 
 		
 		
+		//increasing bid price for first days of the competition 
+		//(expecting high competion on bids) 
 		if (dayBiddingFor>=1 && dayBiddingFor<7)
 		{
-			wantedbudget = wantedbudget * IMPRESSION_URGENCY_FACTOR ;
+			wantedbudget = wantedbudget * IMPRESSION_FIRST_DAYS_FACTOR ;
 		}
 		
 		

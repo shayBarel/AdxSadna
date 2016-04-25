@@ -324,10 +324,10 @@ public class SimpleAdNetwork extends Agent {
 			
 
 			
-			log.info("Day " + day + "Total imp are : "+competition.TatalImpLeft());
+			log.info("Day " + day + "Total imp are : "+competition.TatalImpLeft(day));
 
 			
-			UcsBidder ucsBidder = new UcsBidder(ucsHistory,competition.TatalImpLeft());
+			UcsBidder ucsBidder = new UcsBidder(ucsHistory,competition.TatalImpLeft(day));
 		
 			ucsBidder.setCurrentUcsLevel(ucsLevel);
 			ucsBidder.setPreviousBid(previousBid);
@@ -345,7 +345,7 @@ public class SimpleAdNetwork extends Agent {
 			if (day < 1 )
 				Day2 = day;
 			ucsHistory.setUcsDaily(Day2, 0, 0, 0,previousBid );
-			UcsBidder ucsBidder = new UcsBidder(ucsHistory,competition.TatalImpLeft());
+			UcsBidder ucsBidder = new UcsBidder(ucsHistory,competition.TatalImpLeft(day));
 			ucsBidder.setPreviousBid(previousBid);
 
 			ucsBid = ucsBidder.getUCSbid(day,gameNum);
