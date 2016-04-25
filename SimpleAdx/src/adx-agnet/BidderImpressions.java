@@ -9,7 +9,7 @@ public class BidderImpressions
 
 	public static final double budgetFraction = 0.5 ;
 	
-	public static final double anotherFactor = 5.0 ;
+	public static final double anotherFactor = 3.0 ;
 	
 	public static final double IMPRESSION_URGENCY_FACTOR = 2.5 ;
 	
@@ -59,8 +59,6 @@ public class BidderImpressions
 		double wantedbudget = budgetFraction * remainBudget ;
 		log.fine(String.format("all remaining budget: %f, fraction of remaining budget:%f", remainBudget, wantedbudget));
 		
-		
-		//TODO if
 		
 		//urgency: when approaching end of campaign - raise the impression bid by factor .
 		if (( dayBiddingFor == campaign.dayEnd  ||  dayBiddingFor == (campaign.dayEnd-1) )
