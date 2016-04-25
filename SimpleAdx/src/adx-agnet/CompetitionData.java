@@ -47,8 +47,9 @@ public class CompetitionData
 		return _myCampaigns;
 	}
 	
-	
-	public double TatalImpLeft(){
+	//calculate the number of impressions left for campaigns,
+	//that are still active in dayBiddingFor .
+	public double TatalImpLeft(int dayBiddingFor){
 		
 		Map<Integer, CampaignData> map = GetMyCampaigns();
 		double sum = 0 ;
@@ -59,7 +60,12 @@ public class CompetitionData
 		    while (it.hasNext()) {
 		        Map.Entry pair = (Map.Entry)it.next();
 		        CampaignData camp = (CampaignData)pair.getValue();
-		        sum+= camp.impsTogo();
+		        //sum campaign's left impressions
+		        //only if campaign is still active in time period. 
+		        if (camp.getDayEnd() >= dayBiddingFor)
+		        {
+		        	sum += camp.impsTogo();
+		        }
 		        //it.remove(); // avoids a ConcurrentModificationException
 		            
 		    }
