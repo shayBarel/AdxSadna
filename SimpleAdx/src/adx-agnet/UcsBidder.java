@@ -196,9 +196,7 @@ public void setPreviousBid(double previousBid) {
 			  ucsBid = 0.4;
 		  }
 		  
-		  if (ucsBid<0){
-			  ucsBid = 0.0;
-		  }
+
 
 		  return ucsBid;
 		  
