@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
@@ -100,6 +101,8 @@ public class SimpleAdNetwork extends Agent {
 	//class that saves data about the current competition.
 	private CompetitionData _CurrentCompetition;
 	
+	//save history for further use
+	public Histories history = new Histories();
 	
 	public CompetitionData GetCurrCompetition() 
 	{
@@ -203,6 +206,7 @@ public class SimpleAdNetwork extends Agent {
 	private void handleBankStatus(BankStatus content) 
 	{
 		log.fine("bank status: Day " + day + " :" + content.toString());
+		history.addBankHistory(day, content.getAccountBalance());
 	}
 
 	/**
@@ -639,16 +643,16 @@ public class SimpleAdNetwork extends Agent {
 	{
 
 		log.fine("Day " + day + " : AdNetworkReport");
+		Map<AdNetworkKey, AdNetworkReportEntry> report = new HashMap<AdNetworkKey, AdNetworkReportEntry>();
+		history.addCostHistory(day, adnetReport.getDailyCost());
 		
 		 for (AdNetworkKey adnetKey : adnetReport.keys()) 
 		 {
-			 //double rnd = Math.random(); 
-			 //if (rnd > 0.95) 
-			// { 	
-				 AdNetworkReportEntry entry = adnetReport.getAdNetworkReportEntry(adnetKey);
-				 log.fine(adnetKey + " " + entry); 
-			 //} 
+			 AdNetworkReportEntry entry = adnetReport.getAdNetworkReportEntry(adnetKey);
+			 log.fine(adnetKey + " " + entry); 
+			 report.put(adnetKey, entry);
 		 }
+		 history.addAdnetworkReport(report, day);
 		
 	}
 
