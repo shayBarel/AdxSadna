@@ -10,15 +10,12 @@ import org.apache.commons.math3.stat.regression.SimpleRegression;
 
 public class UcsBidder {
 	
-	
-	int UcsInitialBid;  // at start will be initialized to 0.9
-	double avgUSCLevel;
-	double avgUcsPrice;
-	int currentDay;
 	double TargetUCS;
 	double ImpressionLeft;
 	double previousBid;
 	double CurrentUcsLevel;
+	
+	double c1,c2,c3,c4,c5;
 
 
 
@@ -30,8 +27,6 @@ public class UcsBidder {
 	
 public UcsBidder(UcsHistory ucsHistroy,double ImpressionLeft) {
 		super();
-		 avgUSCLevel = 0.0;
-		 avgUcsPrice = 0.0;
 		previousBid = 0.0;
 		this.ImpressionLeft = ImpressionLeft;
 		this.ucsHistroy = ucsHistroy;
@@ -131,13 +126,7 @@ public void setPreviousBid(double previousBid) {
 			  ucsBid1 = Math.min(0.12 + 0.19*getTargetUCS()
 					  + (0.1-day*0.016),0.12 -day*0.01
 					  + this.getPreviousBid()*(1+(getTargetUCS()-this.getCurrentUcsLevel())));
-			  
-//			  ucsBid2 = Math.min(0.12 + 0.19*getTargetUCS()
-//			  + (0.1-day*0.016),0.12 -day*0.01
-//			  + this.getPreviousBid()*(1+(getTargetUCS()-CurrentUcsLevel)));
-//			  
-//			  ucsBid = Math.min(ucsBid1, ucsBid2);
-			  			  
+			  	  			  
 			  ucsBid = ucsBid1;
 			  
 		  }
@@ -202,22 +191,6 @@ public void setPreviousBid(double previousBid) {
 		  
 	  }
 
-		public double getAvgUSCLevel() {
-		return avgUSCLevel;
-	}
-
-	public void setAvgUSCLevel(double avgUSCLevel) {
-		this.avgUSCLevel = avgUSCLevel;
-	}
-
-	public double getAvgUcsPrice() {
-		return avgUcsPrice;
-	}
-
-	public void setAvgUcsPrice(double avgUcsPrice) {
-		this.avgUcsPrice = avgUcsPrice;
-	}
-
 		public double getImpressionLeft() {
 			return ImpressionLeft;
 		}
@@ -227,15 +200,6 @@ public void setPreviousBid(double previousBid) {
 		}
 
 	  
-	  public double getUSCAverageLevel()
-	  {
-		  return avgUSCLevel;
-	  }
-	  
-	  public double getUSCAveragePrice()
-	  {
-		  return avgUcsPrice;
-	  }
 
 
 		public double getCurrentUcsLevel() {
