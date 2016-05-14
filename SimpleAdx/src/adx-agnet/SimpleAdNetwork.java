@@ -102,7 +102,7 @@ public class SimpleAdNetwork extends Agent {
 	private CompetitionData _CurrentCompetition;
 	
 	//save history for further use
-	public Histories history = new Histories();
+	public DemandHistoryData history = new DemandHistoryData();
 	
 	/*
 	 * the bidBundle to be sent daily to the AdX
@@ -493,7 +493,6 @@ public class SimpleAdNetwork extends Agent {
 
 		//loop through all campaigns
 		CompetitionData competition = GetCurrCompetition();
-		Map <Integer, CampaignData> allCampaigns = competition.GetAllCampaigns();
 		Map<Integer, CampaignData> myCampaigns = competition.GetMyCampaigns();
 		for (Map.Entry<Integer, CampaignData> entry : myCampaigns.entrySet())
 		{
@@ -526,8 +525,7 @@ public class SimpleAdNetwork extends Agent {
 					
 					
 
-				    //rbid = PI_indicator.impBidder(cmp, myCampaigns, allCampaigns, day, ucsTargetLevel);
-					BidderImpressions bidder = new BidderImpressions() ;
+				   	BidderImpressions bidder = new BidderImpressions() ;
 					rbid = bidder.GenerateImpressionBid(cmp, query, dayBiddingFor);
 					log.fine(String.format("generated impression bid for query %s, and campaign %d. "
 							+" bid: %f",
