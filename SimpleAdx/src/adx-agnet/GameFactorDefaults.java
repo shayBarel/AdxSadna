@@ -3,6 +3,8 @@ public class GameFactorDefaults
 {
 
 
+	public static final int INITIAL_DAYS_HIGH_COMPETITION = 7;
+
 	public static final double CONTRACT_BIDS_COMPETITION_DEFAULT_FACTOR = 1.17 ;
 
 	public static final double CONTRACT_BIDS_COMPETITION_LEVEL_INITIAL = 4.177248 ;
