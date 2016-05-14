@@ -50,16 +50,16 @@ public class BidderCampaignEfficient extends BidderCampaign {
 		market.put(pending_campaign.id, pending_campaign); // consider also the
 															// pending campaign
 
-		// call price index class, to compute price.
-		double pi = PI_indicator.popularitySegmentMultiDays(pending_campaign, segment, market, dayStart, dayEnd);
+		// call demand calculator class, to compute price.
+		double demand = DemandCalculator.demandOfSegmentMultiDays(pending_campaign, segment, market, dayStart, dayEnd);
 
 		// update according to competition factor .
 		double competition_level = AgentData.GetActiveAgentInstance().GetContractBidCompetitionLevel();
-		double tmpResult = pi / competition_level; // the more competitive the lower the price
+		double tmpResult = demand / competition_level; // the more competitive the lower the price
 		
-		log.fine(String.format("computed bid for campaign %d. price index: %f, "
+		log.fine(String.format("computed bid for campaign %d. demand level: %f, "
 				+" competition level: %f, final proposed bid: %f", 
-				pending_campaign.id, pi, competition_level, tmpResult));
+				pending_campaign.id, demand, competition_level, tmpResult));
 		
 
 		// fix according to min.max bound
