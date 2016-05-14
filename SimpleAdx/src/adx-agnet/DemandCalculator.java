@@ -155,7 +155,7 @@ public class DemandCalculator
 		//divide by size of whole population to get "probability".
 		double result = ((double) segment_size)/((double) GameFactorDefaults.POPULATION_SIZE);
 		
-		log.finer(String.format("price index : computed size of segment : %s, size is: %d"
+		log.finer(String.format("demand calculator : computed size of segment : %s, size is: %d"
 				+ ", probability in population: %f",
 				segment.toString(), segment_size, result)); 
 		
