@@ -312,7 +312,15 @@ public class SimpleAdNetwork extends Agent {
 		 * Adjust ucs bid s.t. target level is achieved. Note: The bid for the
 		 * user classification service is piggybacked
 		 */
-           
+         
+		if (day == 50)
+		{
+			log.info("UCS file has been created");
+
+			ucsHistory.ucsFILE.CreateFile(gameNum);
+		}
+		
+		
 		
 		if (adNetworkDailyNotification != null) {
 			double ucsLevel = adNetworkDailyNotification.getServiceLevel();
@@ -354,6 +362,7 @@ public class SimpleAdNetwork extends Agent {
 			ucsBid = ucsBidder.getUCSbid(day,gameNum);
 			log.info("Day " + day + ": Initial ucs bid is " + ucsBid);
 		}
+		
 
 		
 		//temporary fix

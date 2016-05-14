@@ -9,6 +9,7 @@ public class UcsHistory {
 	
 	// this is only dummy for checking this is working well . the game number and it's data
 	Map<Integer,UcsDailyReport> GameStats; 
+	UcsHistoryFile ucsFILE;
 	
 	UcsHistory(){
 		
@@ -20,6 +21,9 @@ public class UcsHistory {
 		{
 			GameStats.put(i, new UcsDailyReport(0,0,0,0));
 		}
+		
+		ucsFILE = new UcsHistoryFile();
+		
 		
 	}
 	
@@ -35,6 +39,7 @@ public class UcsHistory {
 		
 		GameStats.put(day, udp);
 		
+		ucsFILE.AddToData(level, price, target, bid);
 	}
 	
 }
