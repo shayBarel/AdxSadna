@@ -102,7 +102,7 @@ public class SimpleAdNetwork extends Agent {
 	private CompetitionData _CurrentCompetition;
 	
 	//save history for further use
-	public Histories history = new Histories();
+	public DemandHistoryData history = new DemandHistoryData();
 	
 	/*
 	 * the bidBundle to be sent daily to the AdX
@@ -484,7 +484,6 @@ public class SimpleAdNetwork extends Agent {
 
 		//loop through all campaigns
 		CompetitionData competition = GetCurrCompetition();
-		Map <Integer, CampaignData> allCampaigns = competition.GetAllCampaigns();
 		Map<Integer, CampaignData> myCampaigns = competition.GetMyCampaigns();
 		for (Map.Entry<Integer, CampaignData> entry : myCampaigns.entrySet())
 		{
