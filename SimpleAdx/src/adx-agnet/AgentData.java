@@ -44,7 +44,6 @@ public class AgentData
 	//////////////////////////////
 	/// agent data & capabilities.
 	//////////////////////////////
-
 	
 	double _QualityRating = 1.0;
 	double _ContractBidCompetitionLevel =  GameFactorDefaults.CONTRACT_BIDS_COMPETITION_LEVEL_INITIAL ;
