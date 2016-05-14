@@ -101,16 +101,6 @@ public class SimpleAdNetwork extends Agent {
 	private CompetitionData _CurrentCompetition;
 	
 	
-	public CompetitionData GetCurrCompetition() 
-	{
-		return _CurrentCompetition;
-	}
-
-	public void SetCurrCompetition(CompetitionData _competition) 
-	{
-		_CurrentCompetition = _competition;
-	}
-
 	/*
 	 * the bidBundle to be sent daily to the AdX
 	 */
@@ -121,10 +111,6 @@ public class SimpleAdNetwork extends Agent {
 	 */
 	private double ucsBid;
 
-	/*
-	 * The targeted service level for the user classification service
-	 */
-	private double ucsTargetLevel;
 
 	/*
 	 * current day of simulation
@@ -133,6 +119,19 @@ public class SimpleAdNetwork extends Agent {
 
 	//list of publishers.
 	private String[] publisherNames;
+
+	
+	
+
+	public CompetitionData GetCurrCompetition() 
+	{
+		return _CurrentCompetition;
+	}
+
+	public void SetCurrCompetition(CompetitionData _competition) 
+	{
+		_CurrentCompetition = _competition;
+	}
 
 	
 	public SimpleAdNetwork() 
